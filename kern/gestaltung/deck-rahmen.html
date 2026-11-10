@@ -1,0 +1,837 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="chalkless-deck-rahmen" content="2">
+<!-- STRUCTURE (keep, fill): chalkless.* meta tags (kern/konventionen.md §2). -->
+<meta name="chalkless.titel" content="{{titel}}">
+<meta name="chalkless.typ" content="praesentation">
+<meta name="chalkless.bereich" content="{{bereich}}">
+<meta name="chalkless.datum" content="{{YYYY-MM-DD}}">
+<meta name="chalkless.status" content="entwurf">
+<meta name="chalkless.vorlage" content="standard">
+<meta name="chalkless.vorlage_version" content="0">
+<title>{{titel}}</title>
+<!--
+  CHALKLESS DECK FRAME · version 2 · 2026-11-08
+  Herkunft: portiert aus present-better v3 (Lizenz/Weitergaberechte ungeklärt, siehe Release-Entscheidung).
+  The mechanics (beats, builds, lighting, magic move, keys, HUD, curtain, print hooks, presenter window, reflow)
+  come from that port; the look (section 3) is the Chalkless default for slides, described in
+  kern/gestaltung/folien.md. No library, no network request, no font file. Works from file://.
+
+  HOW TO USE (the agent, skill praesentation)
+  Copy this file to bereiche/<area>/praesentationen/YYYY-MM-DD_praesentation_<slug>.html, fill the meta tags,
+  <title>, the contract block and the h1.sr-only, set the reading floor (tokens) for the age group, replace the
+  demo beats completely by one beat per phase of the lesson plan, and leave sections 4-6 and the script alone.
+  Check with: python kern/tools/folien_check.py <file> --out <temp folder outside the instance>
+
+  WHAT YOU SET
+  - Tokens in :root (values only; the script and the print rules rely on the names):
+    --u                   design pixel: the deck is drawn at 1920x1080; every measure is calc(N * var(--u)).
+    --bg --ink --muted --line --grey   canvas, text, secondary text, lines, the one fill grey of drawings.
+    --accent --accent-ink one accent, used only as a signal (newest build, star glyph, progress) and its text colour.
+    --font                installed fonts only (Segoe UI, then Noto Sans, Arial); never <link>, @import or url(http).
+    --fs-*                sizes in --u; --fs-body is the reading floor for the age group (folien.md §4).
+  - Beats: main > section.beat#bN[data-title] in lesson order, one per phase. Inside: .head (h1 or h2), .body.
+    Builds: data-build="n" from 1 without gaps; equal numbers appear together; style="--k:1" staggers.
+    Never set `transition` on an element with data-build: the mechanics animate opacity, translate, visibility
+    and the signal properties border-color, color and background-color for you.
+  - Teacher notes: one <aside class="notes" hidden>...</aside> per beat (timing, social form, expected answers,
+    stage directions). Never rendered for learners, not on screen, not in print; the presenter window shows them.
+  - Checkable list: ul[data-check] > li > button (the script sets role, aria-checked, data-done on the li).
+  - Contract block: <script type="application/json" id="chalkless-deck"> (quelle = lesson plan path,
+    dauer_min drives the presenter's time targets).
+
+  WHAT YOU DO NOT TOUCH
+  Sections 4-6 of the CSS and the script. Protocol attributes and classes: .beat data-active data-step
+  data-build .future .current --k data-lit data-node data-on data-check data-done data-ui .curtain .hud .folio
+  .presenter .notes html.js html[data-curtain] html[data-presenter] html[data-idle] html[data-print].
+
+  KEYS
+  Right, Down, PageDown, Space: next build, else next beat. Left, Up, PageUp, Shift+Space: back (previous beat
+  in its end state). Home, End. F, F5: full screen. B or . black, W or , white, Escape lifts the curtain.
+  Click or tap on the right half: forward, left half: back. Deep link #b3. ?step=N opens at build N
+  ('end' = last). Reload keeps beat and build (sessionStorage). ?presenter or the HUD button opens the
+  presenter window with the teacher notes (laptop screen while the projector shows the deck).
+
+  PRINT (optional, only on request)
+  A4 landscape, one beat per page, every beat in its end state. The "just appeared" signal is reset generically:
+  the print hook removes .current from every element, so a new signal type needs no print rule of its own.
+  After printing the deck returns to the state it was in.
+
+  PROTOCOL IN SHORT (kern/tools/folien_check.py relies on it)
+  window.deck {count, index, step, maxStep, stepsOf(i), go(i, step|'end'), next(), prev(), setStep(n)}
+  event deck:change {index, step} · window.deckPrepPrint() · window.deckEndPrint()
+  storage: localStorage chalkless:<pathname>:check|:ziel|:notes, sessionStorage chalkless:<pathname>:pos
+-->
+<script type="application/json" id="chalkless-deck">
+{
+  "quelle": "stunden/{{YYYY-MM-DD}}_stunde_{{slug}}.html",
+  "titel": "{{titel}}",
+  "bereich": "{{bereich}}",
+  "datum": "{{YYYY-MM-DD}}",
+  "dauer_min": 45,
+  "beats": 4
+}
+</script>
+<style>
+/* ---------- 1. TOKENS (set the values) ---------- */
+:root {
+  --u: max(min(100vw / 1920, 100svh / 1080), 0.6px);
+  --bg: #ffffff;
+  --ink: #1a1a1a;
+  --muted: #4a4a4a;          /* 8.9:1 on white: secondary text survives a washed-out projector */
+  --line: #8a8a8a;           /* 3.5:1, never thinner than 2u */
+  --grey: #e9e9e9;           /* the one fill grey of drawings */
+  --accent: #c2410c;         /* 5.2:1; signal only */
+  --accent-ink: #ffffff;
+  --font: "Segoe UI", "Segoe UI Variable Text", "Noto Sans", Arial, Verdana, sans-serif;
+  --font-mono: Consolas, ui-monospace, Menlo, monospace;
+  /* CONTEXT: sizes in design px. --fs-body is the reading floor (folien.md §4); rows 1.1x the floor. */
+  --fs-h1: calc(112 * var(--u));
+  --fs-h2: calc(72 * var(--u));
+  --fs-lead: calc(52 * var(--u));
+  --fs-row: calc(44 * var(--u));
+  --fs-body: calc(40 * var(--u));
+  --fs-small: calc(32 * var(--u));
+  --fs-word: calc(112 * var(--u));
+  --fs-display: calc(128 * var(--u));
+  --dur-micro: 120ms;
+  --dur-build: 320ms;
+  --dur-slide: 560ms;
+  --stagger: 60ms;
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  color-scheme: light;
+}
+@media (prefers-reduced-motion: reduce) {
+  :root { --dur-build: 120ms; --dur-slide: 0ms; --stagger: 0ms; }
+}
+
+/* ---------- 2. BASICS ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+html { background: var(--bg); }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 400 var(--fs-body) / 1.4 var(--font); -webkit-font-smoothing: antialiased; overflow-x: clip; }
+h1, h2, h3, p, ul, ol, figure, table, blockquote { margin: 0; }
+ul, ol { padding: 0; }
+a { color: var(--accent); }
+button { font: inherit; }
+b, strong { font-weight: 600; }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* ---------- 3. LOOK (Chalkless default, folien.md; adapt the recipes, keep the musts) ---------- */
+/* Beat: headline top left, body as a grid whose rows spread down to the common base line at 940 (87 %) */
+.beat { position: relative; min-height: 100svh; padding: calc(72 * var(--u)) calc(112 * var(--u)) calc(140 * var(--u)); display: flex; flex-direction: column; gap: calc(56 * var(--u)); }
+.head { flex: none; }
+.head h1 { font-size: var(--fs-h1); line-height: 1.05; font-weight: 600; letter-spacing: -0.015em; max-width: 16ch; text-wrap: balance; }
+.head h2 { font-size: var(--fs-h2); line-height: 1.1; font-weight: 600; letter-spacing: -0.01em; max-width: calc(1500 * var(--u)); text-wrap: balance; }
+.warn { font-size: var(--fs-lead); font-weight: 600; line-height: 1.2; margin-top: calc(20 * var(--u)); }
+.secondary, [data-small] { color: var(--muted); font-size: var(--fs-small); line-height: 1.3; }
+.body { flex: 1 1 auto; min-height: 0; display: grid; align-content: space-between; gap: calc(48 * var(--u)); }
+.body--center { align-content: center; }
+.folio { display: none; }
+.nowrap { white-space: nowrap; }
+
+/* Title beat: title and picture side by side, meta line on the base line */
+.beat--title { gap: 0; }
+.title { flex: 1 1 auto; display: grid; grid-template-columns: minmax(0, 1fr) calc(560 * var(--u)); gap: calc(96 * var(--u)); align-items: center; }
+.title--text { grid-template-columns: minmax(0, 1fr); }
+.title__sub { font-size: var(--fs-lead); line-height: 1.2; color: var(--muted); margin-top: calc(32 * var(--u)); }
+.title__meta { margin-top: auto; }
+
+/* Pictures: inline SVG in ink strokes (5-7u), one grey; right column on content beats */
+.pic { display: block; }
+.pic svg, .pic img { display: block; width: 100%; height: auto; }
+.pic--title { justify-self: end; width: calc(560 * var(--u)); }
+.body--pic { grid-template-columns: minmax(0, 1fr) calc(440 * var(--u)); grid-template-rows: minmax(0, 1fr) auto; column-gap: calc(96 * var(--u)); align-content: stretch; }
+.body--pic > .pic, .body--pic > .pic-missing { grid-column: 2; grid-row: 1 / -1; align-self: center; width: calc(440 * var(--u)); }
+.body--pic > .top { grid-column: 1; grid-row: 1; align-self: start; }
+.body--pic > .low { grid-column: 1; grid-row: 2; align-self: end; }
+/* A picture that is wished but not there yet: calm area, motif in words, never a file name or template text */
+.pic-missing { display: grid; place-items: center; min-height: calc(320 * var(--u)); padding: calc(32 * var(--u)); border: calc(3 * var(--u)) dashed var(--line); border-radius: calc(16 * var(--u)); color: var(--muted); font-size: var(--fs-small); line-height: 1.3; text-align: center; }
+.pic--title.pic-missing { min-height: calc(380 * var(--u)); }
+
+/* Signal for the build that just appeared.
+   Unframed elements (lines, list rows, questions, quotes, definitions): an accent bar in the left margin.
+   Framed elements (star box, word cards, boxes): their own border turns accent. Never a bar beside a frame. */
+.rows > li, .tasks > li, .sort__list > li, .lead, .goal, .row, .quote, .defs__row { position: relative; }
+.rows > li.current::before, .tasks > li.current::before, .sort__list > li.current::before, .lead.current::before,
+.goal.current::before, .row.current::before, .quote.current::before, .defs__row.current::before {
+  content: ""; position: absolute; left: calc(-44 * var(--u)); top: 0.12em; width: calc(12 * var(--u)); height: 1.1em; border-radius: calc(6 * var(--u)); background: var(--accent);
+}
+.sort__list > li.current::before { top: calc(10 * var(--u) + 0.08em); }
+.star.current, .words > li.current, .box.current, .cards > li.current { border-color: var(--accent); }
+.star::before, .words > li::before, .box::before, .cards > li::before { content: none !important; }
+
+/* Questions and sentences the class reads together */
+.lead { font-size: var(--fs-lead); font-weight: 600; line-height: 1.25; max-width: calc(1600 * var(--u)); text-wrap: balance; }
+.leads { display: grid; gap: calc(20 * var(--u)); }
+.goal { font-size: var(--fs-row); line-height: 1.35; max-width: calc(1600 * var(--u)); }
+.rows { list-style: none; display: grid; gap: calc(24 * var(--u)); max-width: calc(1600 * var(--u)); }
+.rows > li, .row { font-size: var(--fs-row); line-height: 1.3; max-width: calc(1600 * var(--u)); text-wrap: pretty; }
+.rows--lead > li { font-weight: 600; }
+.rows--body > li { font-size: var(--fs-body); line-height: 1.35; }
+
+/* Word cards: one big framed card per word; the newest card's border and word turn accent */
+.words { list-style: none; justify-items: start; }
+.words > li { font-size: var(--fs-word); font-weight: 600; line-height: 1.1; padding: calc(16 * var(--u)) calc(48 * var(--u)); border: calc(4 * var(--u)) solid var(--line); border-radius: calc(20 * var(--u)); }
+.words > li > span { transition: color var(--dur-build) linear; }
+.words > li.current > span { color: var(--accent); }
+
+/* Object cards: a grid of framed names */
+.cards { list-style: none; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: calc(24 * var(--u)); max-width: calc(1400 * var(--u)); }
+.cards > li { border: calc(3 * var(--u)) solid var(--line); border-radius: calc(14 * var(--u)); padding: calc(20 * var(--u)) calc(28 * var(--u)); font-size: var(--fs-body); font-weight: 600; line-height: 1.2; text-align: center; }
+
+/* Task steps: number in a solid circle (1.7x the floor), text beside it */
+.tasks { list-style: none; display: grid; gap: calc(32 * var(--u)); max-width: calc(1500 * var(--u)); }
+.tasks > li { display: grid; grid-template-columns: calc(1.7 * var(--fs-body)) minmax(0, 1fr); column-gap: calc(28 * var(--u)); align-items: start; font-size: var(--fs-body); line-height: 1.35; }
+.tasks__n { width: calc(1.7 * var(--fs-body)); height: calc(1.7 * var(--fs-body)); border-radius: 50%; background: var(--ink); color: var(--bg); font-size: var(--fs-body); font-weight: 600; line-height: 1; display: grid; place-items: center; margin-top: calc(-0.16 * var(--fs-body)); font-variant-numeric: tabular-nums; }
+.tasks--plain { gap: calc(24 * var(--u)); }
+.tasks--plain > li { display: block; }
+.task-text { font-size: var(--fs-body); line-height: 1.35; max-width: calc(1600 * var(--u)); }
+/* Orientation line pupils need in order to act (social form, time, page): reading floor in secondary ink */
+.meta { align-self: end; color: var(--muted); font-size: var(--fs-body); line-height: 1.3; }
+
+/* Framed box (star task, hint): the frame is the signal; the star glyph in accent, 1.5x the floor */
+.star, .box { position: relative; border: calc(3 * var(--u)) solid var(--line); border-radius: calc(16 * var(--u)); padding: calc(24 * var(--u)) calc(36 * var(--u)); font-size: var(--fs-body); line-height: 1.35; display: grid; gap: calc(10 * var(--u)); max-width: calc(1600 * var(--u)); }
+.star { padding-left: calc(2.9 * var(--fs-body)); }
+.star__glyph { position: absolute; left: calc(0.8 * var(--fs-body)); top: calc(17 * var(--u)); font-size: calc(1.5 * var(--fs-body)); line-height: 1; color: var(--accent); }
+
+/* Sorting: columns under underlined headers; rows are a plain list without rules, 1.1x the floor; each row keeps
+   its slot until its build, so nothing jumps */
+.sort { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: calc(128 * var(--u)); align-items: start; }
+.sort__h { font-size: var(--fs-row); font-weight: 600; line-height: 1.2; padding-bottom: calc(12 * var(--u)); border-bottom: calc(3 * var(--u)) solid var(--ink); }
+.sort__list { list-style: none; display: grid; padding-top: calc(8 * var(--u)); }
+.sort__list > li { font-size: var(--fs-row); line-height: 1.25; padding: calc(10 * var(--u)) 0; text-wrap: pretty; }
+
+/* Gap sentence: gaps as lines; the filled words are anchored to their gaps and sit on the line */
+.merk { position: relative; display: grid; gap: calc(24 * var(--u)); }
+.merk__s { font-size: var(--fs-lead); font-weight: 600; line-height: 1.35; }
+.gap { display: inline-block; width: calc(320 * var(--u)); height: 0.95em; border-bottom: calc(4 * var(--u)) solid var(--ink); vertical-align: -0.08em; }
+.gap--s { width: calc(170 * var(--u)); }
+.fill { font-size: var(--fs-lead); font-weight: 600; line-height: 1; text-align: center; white-space: nowrap; }
+.fill.current { color: var(--accent); }
+@supports (anchor-name: --x) {
+  .fills { display: contents; }
+  .fill { position: absolute; bottom: anchor(bottom); left: anchor(left); width: anchor-size(width); }
+  .gap--1 { anchor-name: --g1; } .gap--2 { anchor-name: --g2; } .gap--3 { anchor-name: --g3; }
+  .fill--1 { position-anchor: --g1; } .fill--2 { position-anchor: --g2; } .fill--3 { position-anchor: --g3; }
+}
+@supports not (anchor-name: --x) {
+  .fills { display: flex; gap: calc(48 * var(--u)); }
+}
+
+/* Quotations with source: reading size, typographic quotes as given, source below in secondary ink at the floor */
+.voices { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: calc(128 * var(--u)); align-items: start; }
+.quote { font-size: var(--fs-row); line-height: 1.35; display: grid; gap: calc(16 * var(--u)); }
+.quote__by { font-size: var(--fs-body); line-height: 1.3; color: var(--muted); }
+
+/* Term - definition: term column in semibold, definition beside it */
+.defs { display: grid; gap: calc(28 * var(--u)); max-width: calc(1600 * var(--u)); }
+.defs__row { display: grid; grid-template-columns: calc(250 * var(--u)) minmax(0, 1fr); column-gap: calc(24 * var(--u)); font-size: var(--fs-row); line-height: 1.35; }
+.defs__t { font-weight: 600; }
+.defs__row > span { text-wrap: pretty; }
+
+/* Annotated paragraph: each sentence starts a line group; its label sits in the right margin with a bracket line as
+   tall as the sentence; the newest bracket is accent, earlier ones grey */
+.para { display: grid; gap: calc(40 * var(--u)); }
+.para__row { display: grid; grid-template-columns: minmax(0, 1fr) calc(260 * var(--u)); column-gap: calc(40 * var(--u)); }
+.para__s { font-size: var(--fs-lead); line-height: 1.5; text-wrap: pretty; }
+.para__l { font-size: var(--fs-body); font-weight: 600; line-height: 1.35; padding: calc(17 * var(--u)) 0 0 calc(32 * var(--u)); border-left: calc(6 * var(--u)) solid var(--line); }
+.para__l.current { border-left-color: var(--accent); }
+
+/* Checklist: checkable list; a ticked item stays fully legible (fulfilled, not struck out) */
+.check-intro { font-size: var(--fs-row); line-height: 1.3; }
+.checks { display: grid; gap: calc(28 * var(--u)); }
+[data-check] { list-style: none; display: grid; gap: calc(20 * var(--u)); max-width: calc(1600 * var(--u)); }
+[data-check] li > button { position: relative; display: block; width: 100%; margin: 0; padding: 0 0 0 calc(72 * var(--u)); border: 0; background: none; font: inherit; font-size: var(--fs-body); line-height: 1.35; color: inherit; text-align: left; cursor: pointer; }
+[data-check] li > button:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+[data-check] li > button::before { content: ""; position: absolute; left: 0; top: calc(10 * var(--u)); width: calc(40 * var(--u)); height: calc(40 * var(--u)); border: calc(3 * var(--u)) solid var(--muted); border-radius: calc(8 * var(--u)); background: var(--bg); }
+[data-check] li > button::after { content: ""; position: absolute; left: calc(14 * var(--u)); top: calc(15 * var(--u)); width: calc(12 * var(--u)); height: calc(22 * var(--u)); border: solid var(--accent-ink); border-width: 0 calc(4 * var(--u)) calc(4 * var(--u)) 0; rotate: 45deg; opacity: 0; }
+[data-check] li[data-done] > button::before { background: var(--accent); border-color: var(--accent); }
+[data-check] li[data-done] > button::after { opacity: 1; }
+
+/* Reflow of the look on small screens (phone, screen only) */
+@media screen and (max-width: 899px) {
+  .beat { min-height: 0; padding: 24px 16px 32px; gap: 20px; }
+  .head h1, .head h2 { max-width: none; }
+  .body, .body--pic { align-content: start; gap: 20px; }
+  .title, .body--pic, .sort, .voices, .para__row, .defs__row { grid-template-columns: minmax(0, 1fr); }
+  .body--pic > .pic, .body--pic > .pic-missing, .body--pic > .top, .body--pic > .low { grid-column: 1; grid-row: auto; }
+  .pic, .pic--title, .body--pic > .pic, .pic-missing { width: 60%; max-width: 320px; justify-self: start; min-height: 0; }
+  .cards { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .cards > li { padding: 10px 12px; }
+  .tasks { gap: 16px; }
+  .tasks > li { grid-template-columns: 44px minmax(0, 1fr); column-gap: 12px; }
+  .tasks__n { width: 44px; height: 44px; font-size: 22px; margin-top: 0; }
+  .star { padding: 14px 16px 14px 60px; }
+  .star__glyph { left: 14px; top: 10px; font-size: 32px; }
+  .para__l { padding: 4px 0 0 14px; border-left-width: 4px; margin-top: 4px; }
+  .title__sub { margin-top: 12px; }
+  .title__meta { margin-top: 20px; }
+  [data-check] li > button { padding-left: 36px; }
+  [data-check] li > button::before { width: 24px; height: 24px; top: 0; border-width: 2px; border-radius: 5px; }
+  [data-check] li > button::after { left: 8px; top: 3px; width: 7px; height: 13px; border-width: 0 2px 2px 0; }
+}
+
+/* ---------- 4. MECHANICS (do not touch) ---------- */
+.notes, aside.notes, aside.notes[hidden] { display: none !important; }
+@media screen {
+  .js .beat:not([data-active]) { display: none; }
+  /* Builds: .future until their step; --k staggers; backwards they vanish without stagger.
+     Longhands with an explicit list, so the signal properties (border-color, color, background-color) of a build
+     element animate too and no designer rule has to override the transition. */
+  .js [data-build] {
+    transition-property: opacity, translate, visibility, border-color, color, background-color;
+    transition-duration: var(--dur-build), var(--dur-build), 0s, var(--dur-micro), var(--dur-micro), var(--dur-micro);
+    transition-timing-function: var(--ease-out), var(--ease-out), linear, linear, linear, linear;
+    transition-delay: calc(var(--stagger) * var(--k, 0)), calc(var(--stagger) * var(--k, 0)), calc(var(--stagger) * var(--k, 0)), 0s, 0s, 0s;
+  }
+  .js [data-build].future { opacity: 0; visibility: hidden; translate: 0 calc(16 * var(--u)); transition-delay: 0s, 0s, var(--dur-build), 0s, 0s, 0s; }
+  /* Growing nodes: content inside a [data-node] is display: none until its build */
+  .js [data-node] [data-build] { transition-property: opacity, translate, visibility, display, border-color, color; transition-duration: var(--dur-build), var(--dur-build), 0s, var(--dur-build), var(--dur-micro), var(--dur-micro); transition-behavior: allow-discrete; }
+  .js [data-node] [data-build].future { display: none; }
+  @starting-style { .js [data-node] [data-build]:not(.future) { opacity: 0; translate: 0 calc(10 * var(--u)); } }
+  @media (prefers-reduced-motion: reduce) {
+    .js [data-build].future { translate: none; }
+    @starting-style { .js [data-node] [data-build]:not(.future) { translate: none; } }
+  }
+}
+/* Lighting: [data-node][data-on] is styled by the look; nothing here */
+/* Beat change without view transitions or under reduced motion: cut with fade */
+.beat.fade-in { animation: beat-fade var(--dur-micro) both; }
+@keyframes beat-fade { from { opacity: 0; } }
+@keyframes vt-out { to { opacity: 0; } }
+@keyframes vt-in { from { opacity: 0; } }
+::view-transition-group(*) { animation-duration: var(--dur-slide); animation-timing-function: var(--ease-in-out); }
+::view-transition-old(*) { animation: vt-out 120ms var(--ease-out) both; }
+::view-transition-new(*) { animation: vt-in 300ms var(--ease-out) 300ms both; }
+::view-transition-old(hud) { animation-duration: 1ms; }
+::view-transition-new(hud) { animation-duration: 1ms; animation-delay: 0ms; }
+::view-transition { pointer-events: none; }
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; }
+}
+
+/* HUD, curtain */
+.hud { position: fixed; left: 0; right: 0; bottom: 0; height: 48px; display: none; align-items: center; gap: 18px; padding: 0 24px; font-size: 15px; color: var(--muted); background: var(--bg); border-top: 1px solid var(--line); z-index: 20; view-transition-name: hud; }
+.js .hud { display: flex; transition: opacity 300ms linear; }
+html[data-idle] .hud { opacity: 0; pointer-events: none; }
+.hud__count { font-variant-numeric: tabular-nums; font-weight: 600; color: var(--ink); min-width: 4.2ch; }
+.hud__seg { display: flex; gap: 4px; flex: 1; max-width: 420px; }
+.hud__seg i { flex: 1; height: 4px; background: var(--line); border-radius: 2px; }
+.hud__seg i.on { background: var(--accent); }
+.hud__keys { margin-left: auto; display: flex; gap: 16px; white-space: nowrap; }
+.hud kbd { font: 600 12px/1 var(--font-mono); border: 1px solid var(--line); border-radius: 4px; padding: 3px 6px; background: var(--bg); color: var(--ink); margin-right: 3px; }
+.hud__btn { font: 600 13px var(--font); color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 999px; padding: 5px 12px; cursor: pointer; }
+.hud__btn:hover { border-color: var(--ink); }
+.curtain { position: fixed; inset: 0; z-index: 100; display: none; cursor: none; }
+html[data-curtain="black"] .curtain { display: block; background: #000; }
+html[data-curtain="white"] .curtain { display: block; background: #fff; }
+
+/* Presenter window (?presenter): dark tool window on the teacher's laptop, own px measures */
+.presenter { display: none; }
+html[data-presenter] body > :not(.presenter) { display: none !important; }
+html[data-presenter] body { background: #141517; color: #ececec; font: 400 18px/1.45 var(--font); }
+html[data-presenter] .presenter { display: grid; grid-template-columns: minmax(0, 3fr) minmax(300px, 2fr); grid-template-rows: auto minmax(0, 1fr) auto auto auto; grid-template-areas: "head time" "lines time" "plan plan" "notes notes" "bar bar"; gap: 20px 40px; min-height: 100svh; padding: 24px 32px; }
+.p-head { grid-area: head; }
+.p-build { color: #9aa0a8; font-size: 16px; }
+.p-title { font-size: clamp(22px, 3vw, 34px); font-weight: 600; line-height: 1.15; margin-top: 4px; }
+.p-lines { grid-area: lines; list-style: none; display: grid; align-content: start; gap: 10px; font-size: clamp(18px, 2.2vw, 26px); line-height: 1.35; }
+.p-lines li { padding: 8px 14px; border-left: 4px solid transparent; color: #6f757d; }
+.p-lines li[data-state="shown"] { color: #ececec; }
+.p-lines li[data-state="next"] { color: #ececec; border-left-color: #7fb2f0; background: #1d2026; }
+.p-time { grid-area: time; display: grid; align-content: start; gap: 16px; }
+.p-clock { font-size: clamp(40px, 7vw, 72px); font-weight: 600; font-variant-numeric: tabular-nums; line-height: 1; }
+.p-beat { display: block; font-size: 20px; color: #9aa0a8; margin-top: 8px; font-variant-numeric: tabular-nums; }
+.p-beat[data-over] { color: #7fb2f0; font-weight: 600; }
+.p-ctl { display: flex; gap: 8px; }
+.p-ctl button, .p-goal input { font: inherit; color: #ececec; background: #22252b; border: 1px solid #3a3e46; border-radius: 6px; padding: 6px 14px; cursor: pointer; }
+.p-goal { display: grid; gap: 6px; font-size: 15px; color: #9aa0a8; }
+.p-goal input { width: 8ch; cursor: text; }
+.p-next { border-top: 1px solid #3a3e46; padding-top: 14px; }
+.p-label { font-size: 14px; color: #9aa0a8; text-transform: uppercase; letter-spacing: .06em; }
+.p-next-title { font-size: 22px; font-weight: 600; margin-top: 4px; }
+.p-next-line { color: #9aa0a8; margin-top: 4px; }
+.p-plan { grid-area: plan; border-top: 1px solid #3a3e46; padding-top: 14px; font-size: 19px; line-height: 1.5; color: #ececec; white-space: pre-line; }
+.p-notes { grid-area: notes; display: grid; gap: 6px; font-size: 15px; color: #9aa0a8; }
+.p-notes textarea { font: inherit; font-size: 17px; color: #ececec; background: #1d2026; border: 1px solid #3a3e46; border-radius: 6px; padding: 10px 12px; min-height: 72px; resize: vertical; }
+.p-bar { grid-area: bar; color: #9aa0a8; font-size: 14px; }
+html[data-presenter] :focus-visible { outline-color: #7fb2f0; }
+@media (max-width: 699px) {
+  html[data-presenter] .presenter { grid-template-columns: minmax(0, 1fr); grid-template-areas: "head" "time" "lines" "plan" "notes" "bar"; padding: 16px; }
+}
+
+/* ---------- 5. REFLOW UNDER 900 PX (screen only) ---------- */
+@media screen and (max-width: 899px) {
+  :root {
+    --fs-h1: max(calc(96 * var(--u)), 28px);
+    --fs-h2: max(calc(64 * var(--u)), 22px);
+    --fs-lead: max(calc(52 * var(--u)), 18px);
+    --fs-row: max(calc(44 * var(--u)), 16px);
+    --fs-body: max(calc(30 * var(--u)), 15px);
+    --fs-small: max(calc(24 * var(--u)), 12px);
+    --fs-word: max(calc(112 * var(--u)), 28px);
+    --fs-display: max(calc(180 * var(--u)), 56px);
+  }
+  .js .hud { position: static; height: 44px; padding: 0 16px; }
+  .hud__keys { display: none; }
+}
+
+/* ---------- 6. PRINT: A4 LANDSCAPE, ONE BEAT PER PAGE, END STATE (only on request) ---------- */
+@media print {
+  @page { size: A4 landscape; margin: 0; }
+  :root { --u: calc(297mm / 1920); }
+  html, body { background: #fff; }
+  .beat { display: flex !important; width: 297mm; height: 210mm; min-height: 0; break-after: page; page-break-after: always; break-inside: avoid; overflow: hidden; }
+  .beat:last-of-type { break-after: auto; page-break-after: auto; }
+  .hud, .curtain, .presenter { display: none !important; }
+  .folio { display: block; position: absolute; right: calc(112 * var(--u)); bottom: calc(48 * var(--u)); font-size: var(--fs-small); color: var(--muted); font-variant-numeric: tabular-nums; }
+  [data-check] li[data-done] > button::before { background: var(--bg); border-color: var(--muted); }
+  [data-check] li[data-done] > button::after { opacity: 0; }
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
+</style>
+</head>
+<body>
+
+<main id="deck">
+  <h1 class="sr-only" data-ui>{{titel}}</h1>
+
+  <!-- DEMO BEATS: they show the repertoire, not a lesson. Replace all of them. -->
+  <section class="beat beat--title" id="b1" data-title="Titel">
+    <div class="title">
+      <div class="head">
+        <h1>Eine Stunde, ein Deck</h1>
+        <p class="title__sub">Phase für Phase</p>
+      </div>
+      <figure class="pic pic--title" aria-hidden="true">
+        <svg viewBox="0 0 480 340" xmlns="http://www.w3.org/2000/svg" focusable="false">
+          <rect x="40" y="40" width="400" height="230" rx="16" fill="#ffffff" stroke="var(--ink)" stroke-width="7"/>
+          <rect x="80" y="84" width="180" height="18" rx="9" fill="var(--ink)"/>
+          <g fill="var(--grey)" stroke="var(--ink)" stroke-width="5"><rect x="80" y="130" width="140" height="100" rx="10"/></g>
+          <g fill="var(--line)"><rect x="250" y="140" width="150" height="14" rx="7"/><rect x="250" y="176" width="120" height="14" rx="7"/><rect x="250" y="212" width="135" height="14" rx="7"/></g>
+          <path d="M240 270 V310 M180 316 H300" fill="none" stroke="var(--ink)" stroke-width="7" stroke-linecap="round"/>
+        </svg>
+      </figure>
+    </div>
+    <p class="title__meta secondary">Fach · Klasse · Wochentag, Datum</p>
+    <aside class="notes" hidden>Notiz zur Titelfolie: was vor Beginn bereitliegt.</aside>
+    <span class="folio" data-ui>1 / 4</span>
+  </section>
+
+  <section class="beat" id="b2" data-title="Einstieg">
+    <div class="head"><h2>Eine Frage als Überschrift?</h2></div>
+    <div class="body">
+      <ul class="rows">
+        <li data-build="1">Jeder Impuls erscheint mit einem Klick.</li>
+        <li data-build="2">Der neueste trägt den Balken am Rand.</li>
+      </ul>
+      <p class="lead" data-build="3">Die Leitfrage steht unten auf der Grundlinie.</p>
+    </div>
+    <aside class="notes" hidden>Uhrzeit, Dauer, Sozialform. Was die Lehrkraft tut, erwartete Antworten, wann geklickt wird.</aside>
+    <span class="folio" data-ui>2 / 4</span>
+  </section>
+
+  <section class="beat" id="b3" data-title="Arbeitsauftrag">
+    <div class="head"><h2>Aufgabe 1 · Ein Auftrag in Schritten</h2></div>
+    <div class="body body--pic">
+      <ul class="tasks top">
+        <li><span class="tasks__n">1</span> <span>Alle Schritte stehen von Anfang an da.</span></li>
+        <li><span class="tasks__n">2</span> <span>Ein Satz je Schritt.</span></li>
+      </ul>
+      <div class="star low" data-build="1">
+        <p><span class="star__glyph">★</span> Fertig? Die Zusatzaufgabe erscheint im Rahmen.</p>
+      </div>
+      <div class="pic-missing" role="img" aria-label="Bild folgt: ein Motiv in Worten">Bild folgt: ein Motiv in Worten</div>
+    </div>
+    <aside class="notes" hidden>Sozialform und Zeit, Hilfen, wann die Zusatzaufgabe gezeigt wird.</aside>
+    <span class="folio" data-ui>3 / 4</span>
+  </section>
+
+  <section class="beat" id="b4" data-title="Sicherung">
+    <div class="head"><h2>Ordnen in zwei Spalten</h2></div>
+    <div class="body">
+      <div class="sort">
+        <div class="sort__col">
+          <h3 class="sort__h" data-build="1">gehört dazu</h3>
+          <ul class="sort__list"><li data-build="2">erster Begriff</li><li data-build="4">dritter Begriff</li></ul>
+        </div>
+        <div class="sort__col">
+          <h3 class="sort__h" data-build="1">gehört nicht dazu</h3>
+          <ul class="sort__list"><li data-build="3">zweiter Begriff</li></ul>
+        </div>
+      </div>
+      <ul data-check aria-label="Zum Abhaken">
+        <li data-build="5"><button type="button" role="checkbox" aria-checked="false" tabindex="0">Ein Kriterium zum Abhaken.</button></li>
+      </ul>
+    </div>
+    <aside class="notes" hidden>Reihenfolge der Klicks folgt dem Gespräch.</aside>
+    <span class="folio" data-ui>4 / 4</span>
+  </section>
+
+</main>
+
+<nav class="hud" data-ui aria-label="Steuerung">
+  <span class="hud__count" data-count aria-live="polite">1 / 1</span>
+  <span class="hud__seg" data-seg aria-hidden="true"></span>
+  <span class="hud__keys"><span><kbd>←</kbd><kbd>→</kbd>Weiter und zurück</span><span><kbd>F</kbd>Vollbild</span><span><kbd>B</kbd>Schwarz</span><span><kbd>Esc</kbd>hebt auf</span></span>
+  <button type="button" class="hud__btn" data-presenter>Notizen (Presenter)</button>
+</nav>
+<div class="curtain" data-ui aria-hidden="true"></div>
+
+<div class="presenter" data-ui role="region" aria-label="Presenter-Fenster">
+  <header class="p-head">
+    <p class="p-build" data-p-build>Schritt 0 von 0</p>
+    <h2 class="p-title" data-p-title>–</h2>
+  </header>
+  <ol class="p-lines" data-p-lines aria-label="Zeilen dieser Folie"></ol>
+  <aside class="p-time" aria-label="Zeit">
+    <div class="p-clock"><span data-p-total>00:00</span><span class="p-beat" data-p-beat>00:00 / 00:00</span></div>
+    <div class="p-ctl"><button type="button" data-p-toggle>Start</button><button type="button" data-p-reset>Reset</button></div>
+    <label class="p-goal">Zeitziel für diese Folie in Minuten <input type="number" min="0" step="0.5" data-p-goal></label>
+    <div class="p-next">
+      <p class="p-label">Danach</p>
+      <p class="p-next-title" data-p-next-title>–</p>
+      <p class="p-next-line" data-p-next-line></p>
+    </div>
+  </aside>
+  <section class="p-plan" data-p-plan aria-label="Notizen aus der Stundenplanung"></section>
+  <label class="p-notes">Eigene Notizen zu dieser Folie <textarea data-p-notes rows="3"></textarea></label>
+  <p class="p-bar">Tasten wie im Deck: → weiter, ← zurück, B Schwarz, Escape hebt auf. Der Beamer zeigt das Deck-Fenster; dieses Fenster bleibt auf dem Laptop.</p>
+</div>
+
+<script>
+/* ---------- MECHANICS (do not touch) ---------- */
+(function () {
+  'use strict';
+  var root = document.documentElement;
+  var params = new URLSearchParams(location.search);
+  var isPresenter = params.has('presenter');
+  var beats = Array.prototype.slice.call(document.querySelectorAll('main section.beat'));
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+  var BASE = 'chalkless:' + location.pathname;
+  var contract = {};
+  try { contract = JSON.parse(document.getElementById('chalkless-deck').textContent) || {}; } catch (e) { contract = {}; }
+  var hudCount = document.querySelector('[data-count]');
+  var hudSeg = document.querySelector('[data-seg]');
+  var maxStep = beats.map(function (b) {
+    var m = 0;
+    Array.prototype.forEach.call(b.querySelectorAll('[data-build]'), function (el) { m = Math.max(m, parseInt(el.getAttribute('data-build'), 10) || 0); });
+    return m;
+  });
+  var step = beats.map(function () { return 0; });
+  var current = -1;
+  var printing = null;
+  root.classList.add('js');
+  if (isPresenter) root.setAttribute('data-presenter', '');
+  if (hudSeg) beats.forEach(function () { hudSeg.appendChild(document.createElement('i')); });
+  beats.forEach(function (b, i) { var f = b.querySelector('.folio'); if (f) f.textContent = (i + 1) + ' / ' + beats.length; });
+  /* teacher notes are never shown to learners, whatever the look does */
+  Array.prototype.forEach.call(document.querySelectorAll('aside.notes'), function (a) { a.hidden = true; a.setAttribute('aria-hidden', 'true'); });
+
+  function clamp(n, lo, hi) { return Math.max(lo, Math.min(hi, n)); }
+  function titleOf(i) { return beats[i] ? (beats[i].getAttribute('data-title') || '') : ''; }
+  function store(key, fallback) { try { return JSON.parse(localStorage.getItem(key)) || fallback; } catch (e) { return fallback; } }
+  function save(key, val) { try { localStorage.setItem(key, JSON.stringify(val)); } catch (e) { /* no storage */ } }
+  function savePos() { try { sessionStorage.setItem(BASE + ':pos', JSON.stringify({ i: current, s: step[current] })); } catch (e) { /* no storage */ } }
+  function loadPos() { try { return JSON.parse(sessionStorage.getItem(BASE + ':pos')); } catch (e) { return null; } }
+
+  /* ---- sync deck <-> presenter: BroadcastChannel plus postMessage (file:// in Chromium) ---- */
+  var SELF = Math.random().toString(36).slice(2), seq = 0, seen = {}, via = { bc: 0, pm: 0 }, peer = null, chan = null;
+  try { chan = ('BroadcastChannel' in window) ? new BroadcastChannel(BASE) : null; } catch (e) { chan = null; }
+  function send(msg) {
+    msg.pb = 1; msg.src = SELF; msg.n = ++seq;
+    if (chan) { try { chan.postMessage(msg); } catch (e) { /* closed */ } }
+    var w = isPresenter ? window.opener : peer;
+    if (w && !w.closed) { try { w.postMessage(msg, '*'); } catch (e) { /* no window */ } }
+    if (window.parent !== window) { try { window.parent.postMessage(msg, '*'); } catch (e) { /* no parent */ } }
+  }
+  function receive(d, how) {
+    if (!d || d.pb !== 1 || d.src === SELF) return;
+    if (seen[d.src] >= d.n) return;
+    seen[d.src] = d.n; via[how]++;
+    if (isPresenter) { if (d.type === 'state') presenterState(d); return; }
+    if (d.type === 'hello') broadcast();
+    else if (d.type === 'key') handle(d.key, !!d.shift);
+  }
+  if (chan) chan.onmessage = function (e) { receive(e.data, 'bc'); };
+  window.addEventListener('message', function (e) {
+    var w = isPresenter ? window.opener : peer;
+    if (w && e.source !== w) return;
+    receive(e.data, 'pm');
+  });
+  function broadcast() { if (!isPresenter && current >= 0) send({ type: 'state', index: current, step: step[current], max: maxStep[current] }); }
+
+  /* ---- builds and lighting ---- */
+  function render(i) {
+    var b = beats[i], s = step[i], litN = -1, lit = null;
+    b.setAttribute('data-step', String(s));
+    Array.prototype.forEach.call(b.querySelectorAll('[data-build]'), function (el) {
+      var n = parseInt(el.getAttribute('data-build'), 10) || 0;
+      el.classList.toggle('future', n > s);
+      el.classList.toggle('current', n === s && s > 0 && !printing);
+      if (n <= s && n >= litN && el.hasAttribute('data-lit')) { litN = n; lit = el.getAttribute('data-lit'); }
+    });
+    if (lit === null && b.hasAttribute('data-lit')) lit = b.getAttribute('data-lit');
+    var keys = lit ? lit.split(/\s+/).filter(Boolean) : [];
+    Array.prototype.forEach.call(b.querySelectorAll('[data-node]'), function (node) {
+      if (keys.indexOf(node.getAttribute('data-node')) >= 0) node.setAttribute('data-on', ''); else node.removeAttribute('data-on');
+    });
+  }
+  function hud() {
+    if (hudCount) hudCount.textContent = (current + 1) + ' / ' + beats.length;
+    if (hudSeg) Array.prototype.forEach.call(hudSeg.children, function (el, j) { el.classList.toggle('on', j <= current); });
+  }
+  function changed() {
+    hud();
+    if (!printing) savePos();
+    document.dispatchEvent(new CustomEvent('deck:change', { detail: { index: current, step: step[current] } }));
+    broadcast();
+  }
+  function show(i) {
+    current = i;
+    beats.forEach(function (b, j) { if (j === i) b.setAttribute('data-active', ''); else b.removeAttribute('data-active'); });
+    render(i);
+    if (history.replaceState) { try { history.replaceState(null, '', location.pathname + location.search.replace(/[?&]step=[^&]*/, '').replace(/^&/, '?') + '#' + beats[i].id); } catch (e) { /* ignore */ } }
+    changed();
+  }
+  function transition(update) {
+    if (!document.startViewTransition || reduce.matches) {
+      update();
+      var b = beats[current]; b.classList.remove('fade-in'); void b.offsetWidth; b.classList.add('fade-in');
+      return;
+    }
+    try {
+      var vt = document.startViewTransition(update);
+      ['ready', 'finished', 'updateCallbackDone'].forEach(function (p) { if (vt && vt[p] && vt[p].catch) vt[p].catch(function () {}); });
+    } catch (e) { update(); }
+  }
+  function go(i, s) {
+    i = clamp(parseInt(i, 10) || 0, 0, beats.length - 1);
+    var n = s === 'end' ? maxStep[i] : clamp(parseInt(s, 10) || 0, 0, maxStep[i]);
+    if (i !== current) { step[i] = n; transition(function () { show(i); }); return true; }
+    if (n === step[i]) return false;
+    step[i] = n; render(i); changed(); return true;
+  }
+  function setStep(n) { if (current < 0) return false; return go(current, n); }
+  function ctrl() { var c = window.deckCtrl && window.deckCtrl[beats[current].id]; return c || null; }
+  function next() {
+    if (current < 0) { show(0); return true; }
+    var c = ctrl(); if (c && typeof c.next === 'function' && c.next()) return true;
+    if (step[current] < maxStep[current]) { step[current]++; render(current); changed(); return true; }
+    if (current + 1 < beats.length) return go(current + 1, 0);
+    return false;
+  }
+  function prev() {
+    if (current < 0) { show(0); return true; }
+    var c = ctrl(); if (c && typeof c.prev === 'function' && c.prev()) return true;
+    if (step[current] > 0) { step[current]--; render(current); changed(); return true; }
+    if (current > 0) return go(current - 1, 'end');
+    return false;
+  }
+
+  /* ---- curtain, full screen, keys ---- */
+  function curtain(kind) {
+    var now = root.getAttribute('data-curtain') || '';
+    var k = (kind && now !== kind) ? kind : '';
+    if (k) root.setAttribute('data-curtain', k); else root.removeAttribute('data-curtain');
+  }
+  function fullscreen(enterOnly) {
+    if (document.fullscreenElement) { if (!enterOnly && document.exitFullscreen) document.exitFullscreen().catch(function () {}); }
+    else if (root.requestFullscreen) root.requestFullscreen().catch(function () {});
+  }
+  var FWD = /^(ArrowRight|ArrowDown|PageDown| )$/, BACK = /^(ArrowLeft|ArrowUp|PageUp)$/;
+  function handle(key, shift) {
+    if (key === 'b' || key === 'B' || key === '.') { curtain('black'); return true; }
+    if (key === 'w' || key === 'W' || key === ',') { curtain('white'); return true; }
+    if (root.hasAttribute('data-curtain')) {
+      if (key === 'Escape' || FWD.test(key) || BACK.test(key) || key === 'Home' || key === 'End') { curtain(''); return true; }
+      return false;
+    }
+    if (FWD.test(key) && !(key === ' ' && shift)) { next(); return true; }
+    if (BACK.test(key) || (key === ' ' && shift)) { prev(); return true; }
+    if (key === 'Home') { go(0, 0); return true; }
+    if (key === 'End') { go(beats.length - 1, 'end'); return true; }
+    if (key === 'f' || key === 'F') { fullscreen(false); return true; }
+    if (key === 'F5') { fullscreen(true); return true; }
+    var c = current >= 0 ? ctrl() : null;
+    if (c && typeof c.key === 'function' && c.key(key)) return true;
+    return false;
+  }
+  window.addEventListener('keydown', function (e) {
+    if (e.defaultPrevented || e.altKey || e.metaKey || e.ctrlKey) return;
+    var t = e.target;
+    if (t.closest && t.closest('input, textarea, select, [contenteditable]')) return;
+    if (t.closest && t.closest('button, a') && /^(Enter| |Tab)$/.test(e.key)) return;
+    if (e.key === 'Tab') return;
+    if (isPresenter) { send({ type: 'key', key: e.key, shift: e.shiftKey }); e.preventDefault(); return; }
+    if (handle(e.key, e.shiftKey)) e.preventDefault();
+  });
+  document.getElementById('deck').addEventListener('click', function (e) {
+    if (isPresenter) return;
+    if (e.target.closest && e.target.closest('a, button, input, label, select, textarea, summary, [data-ui], ul[data-check] li')) return;
+    var sel = window.getSelection ? window.getSelection() : null;
+    if (sel && String(sel).length) return;
+    if (e.clientX > window.innerWidth / 2) next(); else prev();
+  });
+  function fromHash() { var m = /^#b(\d+)$/.exec(location.hash); return m ? clamp(parseInt(m[1], 10) - 1, 0, beats.length - 1) : 0; }
+  window.addEventListener('hashchange', function () { if (isPresenter) return; var i = fromHash(); if (i !== current) go(i, 0); });
+
+  /* ---- print: every beat in its end state, no "just appeared" signal of any type, then back ---- */
+  function runPrint() {
+    if (printing) return;
+    printing = { step: step.slice(), current: current };
+    root.setAttribute('data-print', '');
+    beats.forEach(function (b, i) { step[i] = maxStep[i]; render(i); });
+    Array.prototype.forEach.call(document.querySelectorAll('.current'), function (el) { el.classList.remove('current'); });
+  }
+  function endPrint() {
+    if (!printing) return;
+    var p = printing; printing = null;
+    root.removeAttribute('data-print');
+    step = p.step; beats.forEach(function (b, i) { render(i); });
+    if (p.current >= 0) { current = p.current; changed(); }
+  }
+  window.deckPrepPrint = runPrint;
+  window.deckEndPrint = endPrint;
+  window.addEventListener('beforeprint', runPrint);
+  window.addEventListener('afterprint', endPrint);
+  var pm = window.matchMedia('print');
+  var onPm = function (e) { if (e.matches) runPrint(); };
+  if (pm.addEventListener) pm.addEventListener('change', onPm); else if (pm.addListener) pm.addListener(onPm);
+
+  /* ---- checkable list: li > button[role=checkbox] ---- */
+  var CHECK = BASE + ':check', checked = store(CHECK, {});
+  Array.prototype.forEach.call(document.querySelectorAll('ul[data-check] > li'), function (li, idx) {
+    var beat = li.closest('section.beat'), key = li.id || ((beat ? beat.id : 'x') + '-' + idx);
+    var box = li.querySelector('button');
+    if (!box) { box = document.createElement('button'); box.type = 'button'; while (li.firstChild) box.appendChild(li.firstChild); li.appendChild(box); }
+    box.setAttribute('role', 'checkbox'); box.setAttribute('tabindex', '0');
+    function paint() { var on = !!checked[key]; box.setAttribute('aria-checked', on ? 'true' : 'false'); if (on) li.setAttribute('data-done', ''); else li.removeAttribute('data-done'); }
+    function toggle() { checked[key] = !checked[key]; save(CHECK, checked); paint(); }
+    paint();
+    li.addEventListener('click', function (e) { e.stopPropagation(); toggle(); });
+    box.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); toggle(); } });
+  });
+
+  /* ---- presenter window ---- */
+  var presBtn = document.querySelector('button[data-presenter]');
+  if (presBtn) presBtn.addEventListener('click', function () {
+    peer = window.open(location.pathname + '?presenter', 'chalkless-presenter');
+  });
+  var P = { index: 0, step: 0, max: 0 }, ZIEL = BASE + ':ziel', NOTES = BASE + ':notes';
+  var ziel = store(ZIEL, {}), notes = store(NOTES, {});
+  var timer = { running: false, total: 0, beat: 0, last: 0 };
+  function q(sel) { return document.querySelector(sel); }
+  function fmt(ms) { var s = Math.max(0, Math.floor(ms / 1000)); return String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0'); }
+  function rowsOf(i) {
+    var els = Array.prototype.filter.call(beats[i].querySelectorAll('[data-build]'), function (el) {
+      return !el.closest('[data-node]') && el.getAttribute('aria-hidden') !== 'true';
+    });
+    return els.map(function (el, k) {
+      return { n: parseInt(el.getAttribute('data-build'), 10) || 0, k: k, text: (el.textContent || '').replace(/\s+/g, ' ').trim() };
+    }).sort(function (a, b) { return a.n - b.n || a.k - b.k; });
+  }
+  function firstLine(i) {
+    var rows = rowsOf(i); if (rows.length) return rows[0].text;
+    var el = beats[i].querySelector('p, li, h2, h1'); return el ? (el.textContent || '').replace(/\s+/g, ' ').trim() : '';
+  }
+  function goalOf(i) {
+    var id = beats[i].id, v = parseFloat(ziel[id]);
+    if (isFinite(v) && v >= 0) return v;
+    var total = parseFloat(contract.dauer_min); return (isFinite(total) && total > 0) ? total / beats.length : 0;
+  }
+  function tick() {
+    var now = Date.now();
+    if (timer.running) { var dt = now - timer.last; timer.total += dt; timer.beat += dt; timer.last = now; }
+    var tot = q('[data-p-total]'), bt = q('[data-p-beat]');
+    if (tot) tot.textContent = fmt(timer.total);
+    if (bt) {
+      var goal = goalOf(P.index) * 60000;
+      bt.textContent = fmt(timer.beat) + ' / ' + fmt(goal);
+      if (goal > 0 && timer.beat > goal) bt.setAttribute('data-over', ''); else bt.removeAttribute('data-over');
+    }
+  }
+  function renderPresenter() {
+    var i = P.index, s = P.step, n = maxStep[i] || 0;
+    var t = q('[data-p-title]'), b = q('[data-p-build]'), list = q('[data-p-lines]'), plan = q('[data-p-plan]');
+    if (t) t.textContent = (i + 1) + ' · ' + titleOf(i);
+    if (b) b.textContent = 'Schritt ' + s + ' von ' + n;
+    if (list) {
+      list.textContent = '';
+      rowsOf(i).forEach(function (r) {
+        var li = document.createElement('li');
+        var state = r.n <= s ? 'shown' : r.n === s + 1 ? 'next' : 'future';
+        li.setAttribute('data-state', state); li.textContent = r.text; list.appendChild(li);
+      });
+    }
+    if (plan) { var a = beats[i].querySelector('aside.notes'); plan.textContent = a ? (a.textContent || '').trim() : ''; }
+    var nt = q('[data-p-next-title]'), nl = q('[data-p-next-line]');
+    if (nt) nt.textContent = i + 1 < beats.length ? (i + 2) + ' · ' + titleOf(i + 1) : 'Letzte Folie';
+    if (nl) nl.textContent = i + 1 < beats.length ? firstLine(i + 1) : '';
+    var g = q('[data-p-goal]'); if (g && document.activeElement !== g) g.value = String(goalOf(i));
+    var ta = q('[data-p-notes]'); if (ta && document.activeElement !== ta) ta.value = notes[beats[i].id] || '';
+    tick();
+  }
+  function presenterState(d) {
+    var changedBeat = d.index !== P.index;
+    P.index = clamp(d.index, 0, beats.length - 1); P.step = d.step; P.max = d.max;
+    if (changedBeat) timer.beat = 0;
+    renderPresenter();
+  }
+  if (isPresenter) {
+    document.title = 'Presenter · ' + document.title;
+    var tg = q('[data-p-toggle]'), rs = q('[data-p-reset]'), goal = q('[data-p-goal]'), ta = q('[data-p-notes]');
+    if (tg) tg.addEventListener('click', function () {
+      if (timer.running) { tick(); timer.running = false; } else { timer.running = true; timer.last = Date.now(); }
+      tg.textContent = timer.running ? 'Stop' : 'Start';
+    });
+    if (rs) rs.addEventListener('click', function () { timer.running = false; timer.total = 0; timer.beat = 0; if (tg) tg.textContent = 'Start'; tick(); });
+    if (goal) goal.addEventListener('change', function () { var v = parseFloat(goal.value); if (isFinite(v) && v >= 0) { ziel[beats[P.index].id] = v; save(ZIEL, ziel); } tick(); });
+    if (ta) ta.addEventListener('input', function () { notes[beats[P.index].id] = ta.value; save(NOTES, notes); });
+    setInterval(tick, 250);
+    renderPresenter();
+    send({ type: 'hello' });
+  }
+
+  /* ---- HUD hides after 2.5 s without pointer movement (no key hints on the projector) ---- */
+  var idleTimer = null;
+  function wake() {
+    root.removeAttribute('data-idle');
+    if (idleTimer) clearTimeout(idleTimer);
+    idleTimer = setTimeout(function () { if (!isPresenter) root.setAttribute('data-idle', ''); }, 2500);
+  }
+  if (!isPresenter) {
+    ['pointermove', 'pointerdown', 'keydown'].forEach(function (ev) { window.addEventListener(ev, wake, { passive: true }); });
+    var hudEl = document.querySelector('.hud');
+    if (hudEl) { hudEl.addEventListener('pointerenter', function () { if (idleTimer) clearTimeout(idleTimer); root.removeAttribute('data-idle'); }); hudEl.addEventListener('pointerleave', wake); }
+    wake();
+  }
+
+  /* ---- protocol for tools ---- */
+  window.deckCtrl = window.deckCtrl || {};
+  window.deck = {
+    get count() { return beats.length; },
+    get index() { return current; },
+    get step() { return current < 0 ? 0 : step[current]; },
+    get maxStep() { return current < 0 ? 0 : maxStep[current]; },
+    get sync() { return { bc: via.bc, pm: via.pm }; },
+    stepsOf: function (i) { return maxStep[i] || 0; },
+    go: go, next: next, prev: prev, setStep: setStep
+  };
+
+  /* ---- start: ?step=N first, then the position saved before a reload, then the hash ---- */
+  if (!isPresenter) {
+    var qsStep = params.get('step'), saved = loadPos(), start = fromHash();
+    if (qsStep !== null) go(start, qsStep === 'end' ? 'end' : qsStep);
+    else if (saved && saved.i === start && saved.s > 0) go(start, saved.s);
+    else show(start);
+  }
+})();
+</script>
+</body>
+</html>

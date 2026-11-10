@@ -1,0 +1,219 @@
+/* Chalkless · standard.css · core default layout ("standard" / version 0)
+   Direction B: calm, monochrome, one sans family (Segoe UI) in two registers.
+   Read kern/gestaltung/dokumente.md first. Tags used in the comments below:
+     [must]    binding wherever this sheet applies
+     [context] depends on age, subject, density, purpose: the agent decides and may override
+               in the document's own <style> block, stating the reason in an HTML comment
+     [recipe]  one good way, not the only one; adapt freely
+   Registers: <body class="teacher"> plans, keys, notes · <body class="pupil"> worksheets, cards.
+   Use: <link rel="stylesheet" href="…/kern/gestaltung/standard.css"> while working, or paste the
+   whole file into <style> for a self-contained hand-in file. Document overrides come after it.
+   Greys: text #111 · secondary #595959 · row rules #4d4d4d · hairlines #6e6e6e · cut lines #777 ·
+   tracing dots #8c8c8c. No other colours, no fills behind text [must]. */
+
+/* ===== Pages [recipe]: A4 and the margins are the sampled values; a Vorgabe or template wins ===== */
+@page {
+  size: A4;
+  margin: 16mm 18mm 18mm 18mm;
+  @top-left {      /* running head: the document sets content: "…" in its own <style> */
+    content: none;
+    font: 8pt/1 "Segoe UI", "Noto Sans", Arial, sans-serif; color: #595959;
+    vertical-align: bottom; padding-bottom: 5mm;
+  }
+  @bottom-left {   /* status: describe only what is true ("Entwurf", later "Geprüft · <date>") */
+    content: "Entwurf";
+    font: 8pt/1 "Segoe UI", "Noto Sans", Arial, sans-serif; color: #595959;
+    vertical-align: top; padding-top: 5mm;
+  }
+  @bottom-right {
+    content: "Seite " counter(page) " von " counter(pages);
+    font: 8pt/1 "Segoe UI", "Noto Sans", Arial, sans-serif; color: #595959;
+    font-variant-numeric: tabular-nums; vertical-align: top; padding-top: 5mm;
+  }
+}
+@page :first { @top-left { content: none; } }          /* no running head on page 1 */
+@page landscape { size: A4 landscape; margin: 15mm 18mm 18mm 18mm; }   /* .landscape { page: landscape } */
+@page pupil {                                          /* body.pupil: title left (document sets it), plain number right */
+  margin: 15mm 15mm 18mm 15mm;
+  @top-left { content: none; }
+  @bottom-left { content: none; font-size: 8.5pt; }
+  @bottom-right { content: "Seite " counter(page); font-size: 8.5pt; }
+}
+@page cards { margin: 10mm; @top-left { content: none; } @bottom-left { content: none; } @bottom-right { content: none; } }
+@page teacher-insert {                                 /* teacher pages inside a pupil file (Lösungsblatt) */
+  margin: 16mm 18mm 18mm 18mm;
+  @top-left { content: none; }
+  @bottom-left { content: "Entwurf · nur für die Lehrkraft"; }
+  @bottom-right { content: "Seite " counter(page) " von " counter(pages); }
+}
+
+/* ===== Base [must: one family, black on white, print-color-adjust] [recipe: values] ===== */
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: "Segoe UI", "Noto Sans", Arial, sans-serif;
+  color: #111; background: #fff; font-kerning: normal;
+  hyphens: manual; -webkit-hyphens: manual;            /* hyphens: auto fails in the headless export: use &shy; */
+  -webkit-print-color-adjust: exact; print-color-adjust: exact;
+}
+body.teacher { font-size: 10pt; line-height: 1.36; }   /* [context] reference for plans; 9.5–11 pt by density */
+body.pupil { font-size: 13pt; line-height: 1.4; page: pupil; }  /* [context] 13 pt sampled on grade 3–4 sheets;
+                                                           grades 1–2 about 15–16 pt, readers from about 14 on 11–12 pt (dokumente.md §5 table): override in the document */
+p { margin: 0 0 1em; orphans: 3; widows: 3; }
+ol, ul { margin: 0 0 1em; padding-left: 5.5mm; }
+li { margin-bottom: 0.25em; }
+li::marker { color: #595959; }
+strong { font-weight: 600; }                            /* semibold is the only emphasis weight */
+.secondary { color: #595959; }
+.nums { font-variant-numeric: tabular-nums; }
+.nowrap { white-space: nowrap; }
+.keep { break-inside: avoid; page-break-inside: avoid; }
+.page-break { break-before: page; page-break-before: always; }
+.landscape { page: landscape; }                         /* wide tables; a page name change starts a new page */
+.caption { font-size: 8.5pt; color: #595959; margin: 1mm 0 0; }
+
+/* ===== Screen view only: white page on grey. Everything here is inside @media screen, so print is untouched ===== */
+@media screen {
+  html { background: #e4e4e4; }
+  body { max-width: 210mm; margin: 10mm auto; padding: 16mm 18mm; background: #fff; box-shadow: 0 1mm 4mm rgba(0, 0, 0, 0.2); }
+  body:has(.landscape) { max-width: 297mm; }
+  body.pupil { padding: 15mm; }
+}
+
+/* ===== PRÜFEN marker [must: the wording "[PRÜFEN: <block>]"] [recipe: the outline] ===== */
+.pruefen {
+  font-weight: 600; font-size: 0.92em; border: 0.6pt solid #111; border-radius: 2pt; padding: 0 0.35em;
+  -webkit-box-decoration-break: clone; box-decoration-break: clone;
+}
+
+/* ===== Teacher register: label column [context: the shape] [recipe: 32 mm label + 7 mm gap] ===== */
+.sec { position: relative; padding-left: 39mm; margin: 0 0 6mm; }
+.sec > .label { position: absolute; left: 0; top: 0.15em; width: 32mm; font-size: 9.5pt; line-height: 1.3; font-weight: 600; }
+.label .nr { display: block; font-weight: 400; font-size: 8pt; color: #595959; letter-spacing: 0.03em; margin-bottom: 0.35em; font-variant-numeric: tabular-nums; }
+.sec > .body > :last-child { margin-bottom: 0; }
+
+/* ----- Title block and headings (teacher register; also inside .teacher-insert) ----- */
+.title-block { margin-bottom: 5.5mm; padding-bottom: 4mm; border-bottom: 1pt solid #111; }
+:is(.teacher, .teacher-insert) .title-block > .label { top: 1.1em; font-size: 8.5pt; text-transform: uppercase; letter-spacing: 0.12em; color: #595959; }
+.teacher h1 { margin: 0; font-size: 21pt; line-height: 1.15; font-weight: 600; letter-spacing: -0.005em; }
+:is(.teacher, .teacher-insert) h2 { margin: 0 0 4mm; font-size: 12pt; line-height: 1.2; font-weight: 600; break-after: avoid; page-break-after: avoid; }
+:is(.teacher, .teacher-insert) h2 .nr { font-weight: 400; font-size: 8.5pt; color: #595959; letter-spacing: 0.03em; margin-right: 2mm; font-variant-numeric: tabular-nums; }
+/* chapter heading for long prose: full-width rule, number hanging in the label column; no third level [context] */
+:is(.teacher, .teacher-insert) h2.chapter { position: relative; padding: 0 0 1.5mm 39mm; margin: 8mm 0 4mm; font-size: 13pt; border-bottom: 0.75pt solid #111; }
+:is(.teacher, .teacher-insert) h2.chapter .nr { position: absolute; left: 0; top: 0.45em; width: 32mm; margin: 0; }
+h2.chapter.page-break { margin-top: 0; }                /* reset the top margin after a forced break */
+
+/* ----- Kopfdaten: definition grid, 30 mm term column, hairlines [recipe] ----- */
+dl.head-data { display: grid; grid-template-columns: 30mm 1fr; margin: 0; line-height: 1.3; break-inside: avoid; }
+.head-data dt, .head-data dd { margin: 0; padding: 1.2mm 0 1.3mm; border-bottom: 0.6pt solid #6e6e6e; }
+.head-data dt { font-size: 8.5pt; color: #595959; padding-top: 1.7mm; padding-right: 3mm; }
+.head-data.two-col { grid-template-columns: 28mm 1fr 28mm 1fr; }     /* on a landscape page */
+.head-data.two-col dd:nth-of-type(odd) { padding-right: 10mm; }
+
+/* ===== Teacher tables: horizontal rules only, gutter by padding =====
+   [context] no vertical rules was the teacher's choice in the sample round; an institutional grid wins.
+   [must] thead repeats; [recipe] all sizes. Column widths: <colgroup> with mm values summing to the printable width. */
+table.t-table { width: 100%; border-collapse: collapse; table-layout: fixed; font-size: 10.5pt; line-height: 1.32; }
+.t-table thead { display: table-header-group; }
+.t-table th {
+  text-align: left; vertical-align: bottom; font-size: 9pt; line-height: 1.25; font-weight: 600;
+  padding: 0 3.5mm 1.6mm 0; border-bottom: 1.1pt solid #111;
+}
+.t-table td { vertical-align: top; padding: 2.1mm 3.5mm 2.4mm 0; border-bottom: 0.75pt solid #4d4d4d; }
+.t-table th:last-child, .t-table td:last-child { padding-right: 0; }
+.t-table tr { break-inside: avoid; page-break-inside: avoid; }        /* rows stay whole; see dokumente.md for very tall rows */
+.t-table td.key { font-weight: 600; font-variant-numeric: tabular-nums; }   /* most-scanned value first: time, lesson, week */
+.t-table .sub { display: block; font-weight: 400; font-size: 8.5pt; color: #595959; margin-top: 0.15em; }
+.t-table tr.sum td { border-top: 1.1pt solid #111; border-bottom: 1.1pt solid #111; font-weight: 600; padding-top: 1.8mm; padding-bottom: 1.8mm; }
+.t-table tr.buffer td { color: #595959; }
+.t-table tr.buffer td.key { color: #111; }
+.t-table tr.holiday td { padding-top: 1mm; padding-bottom: 1.1mm; font-size: 9pt; font-weight: 600; color: #595959; }
+.t-table tr.group td { padding-top: 5.5mm; font-size: 11.5pt; font-weight: 600; border-bottom: 1.1pt solid #111; }
+.t-table tbody.group-block { break-inside: avoid; page-break-inside: avoid; }   /* group row + its first rows together */
+.t-table.compact { font-size: 10pt; }                                   /* inside the portrait text column */
+.table-note { font-size: 8.5pt; color: #595959; max-width: 190mm; margin: 1.5mm 0 0; }
+.marker {                                                               /* small black caps marker, e.g. Lehrprobe */
+  display: inline-block; background: #111; color: #fff; font-size: 7pt; line-height: 1; font-weight: 600;
+  letter-spacing: 0.1em; text-transform: uppercase; padding: 0.9mm 1.4mm 1mm; border-radius: 1.5pt; margin-bottom: 1.4mm;
+}
+/* short closing section that stays on the last landscape page [context]: bounded measure, kept whole */
+.closing { max-width: 175mm; margin-top: 6mm; break-inside: avoid; page-break-inside: avoid; }
+.closing .sec { margin-bottom: 4mm; }
+
+/* ===== Pupil register: head ===== */
+.name-line { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 5mm; font-size: 0.96em; }
+.name-line .field { margin-right: 3mm; }
+.rule { display: inline-block; height: 1em; border-bottom: 0.75pt solid #111; vertical-align: -0.15em; }  /* width via style="width:…" */
+.pupil .title-block { display: flex; align-items: center; gap: 6mm; margin-bottom: 6mm; padding-bottom: 4mm; border-bottom: 1.2pt solid #111; }
+.pupil .title-block svg { width: 14mm; height: 13mm; flex: none; }    /* optional monochrome line icon */
+.pupil h1 { margin: 0; font-size: 1.85em; line-height: 1.1; font-weight: 600; }
+.pupil .subtitle { margin: 1.5mm 0 0; font-size: 1.04em; }
+
+/* ----- Task block: badge left, content right; never split [must] ----- */
+.task { display: grid; grid-template-columns: 11mm 1fr; column-gap: 5mm; margin-bottom: 7mm; break-inside: avoid; page-break-inside: avoid; }
+.task .content { padding-top: 1.5mm; }
+.badge {                                                                /* solid black is allowed for small markers */
+  width: 11mm; height: 11mm; border-radius: 2.5mm; background: #111; color: #fff; font-size: 16pt; font-weight: 600;
+  line-height: 1; display: flex; align-items: center; justify-content: center;
+}
+.badge.star { background: #fff; color: #111; border: 1.2pt solid #111; font-family: "Segoe UI Symbol", "Segoe UI", sans-serif; font-size: 15pt; }  /* use ★ U+2605, never an emoji */
+.pupil h2 { margin: 0 0 2.5mm; font-size: 1.2em; line-height: 1.2; font-weight: 600; break-after: avoid; page-break-after: avoid; }
+.pupil h2 .light { font-weight: 400; }
+.instruction { font-weight: 600; font-size: 1.04em; line-height: 1.35; margin: 0 0 3.5mm; }  /* [context] one instruction sentence per task in grades 1–2 */
+
+/* ----- Pupil tables and answer grids: FULL grid, children write into the cells [context: row height] ----- */
+table.p-table { width: 100%; border-collapse: collapse; table-layout: fixed; margin-bottom: 4mm; }
+.p-table th { font-size: 0.88em; font-weight: 600; line-height: 1.25; text-align: left; vertical-align: bottom; padding: 2mm 2.5mm; border: 0.6pt solid #111; border-bottom-width: 1.2pt; }
+.p-table td { height: 10mm; padding: 0 2.5mm; border: 0.6pt solid #111; vertical-align: middle; }   /* 10–12.5 mm for handwriting */
+.p-table tr { break-inside: avoid; page-break-inside: avoid; }
+.center { text-align: center; }
+.checkbox { font-family: "Segoe UI Symbol", "Segoe UI", sans-serif; font-size: 1.75em; line-height: 1; vertical-align: -0.14em; margin-right: 0.5mm; }  /* ☐ U+2610 */
+
+/* ----- Boxes: tip, drawing, safety [recipe] ----- */
+.box { border: 0.9pt solid #111; border-radius: 2.5mm; padding: 2.5mm 5mm; margin: 0 0 4mm; break-inside: avoid; page-break-inside: avoid; }
+.box > :last-child { margin-bottom: 0; }
+.box .box-title { font-weight: 600; margin: 0 0 1mm; }
+.box.draw { border-width: 1pt; border-radius: 3mm; height: 60mm; padding: 0; }   /* height via style="height:…" */
+.box.safety { border-width: 1.4pt; display: grid; grid-template-columns: 9mm 1fr; column-gap: 4mm; align-items: start; }
+.box.safety::before {                                                   /* inline-SVG warning triangle; never the ⚠ glyph (colour emoji risk) */
+  content: ""; width: 9mm; height: 9mm; margin-top: 0.5mm;
+  background: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M12 2.5 22.5 21H1.5Z' fill='none' stroke='%23111' stroke-width='2' stroke-linejoin='round'/><path d='M12 9v6' stroke='%23111' stroke-width='2.2' stroke-linecap='round'/><circle cx='12' cy='18' r='1.3' fill='%23111'/></svg>") center / contain no-repeat;
+}
+.word-box { display: inline-block; border: 0.9pt solid #111; border-radius: 2.5mm; padding: 2mm 5mm; margin: 0 0 2.5mm; font-weight: 600; font-size: 1.08em; }
+.gap-text { margin: 0; line-height: 1.8; }
+.blank { display: inline-block; width: 32mm; height: 1em; border-bottom: 0.75pt solid #111; vertical-align: -0.15em; }  /* width via style */
+
+/* ----- Writing lines [context: ≥10 mm apart for grades 3–4, more below] ----- */
+.lines { list-style: none; margin: 0; padding: 0; }
+.lines li { display: flex; align-items: baseline; gap: 3mm; height: 12mm; font-weight: 600; }
+.lines .rule { flex: 1; }
+
+/* ----- Pflicht / Wahl pills ----- */
+.pill { display: inline-block; padding: 0.6mm 3mm; border-radius: 10mm; background: #111; color: #fff; font-size: 11pt; font-weight: 600; line-height: 1.3; }
+.pill.outline { background: #fff; color: #111; border: 0.9pt solid #111; }
+
+/* ----- Cut cards: 2 × 2 per A4 on page "cards", dashed cut lines on every edge, solid frame inset 7 mm -----
+   [must] cards stay whole and carry set name and number. [recipe] grid; the dashed lines on the outer edges mean the
+   10 mm page margin (printer-safe) is cut away. Half-sheet cards: one row of 2 at grid-auto-rows: 277mm. */
+.cards { page: cards; break-before: page; page-break-before: always; display: grid; grid-template-columns: 1fr 1fr; grid-auto-rows: 138mm; border-top: 0.6pt dashed #777; border-left: 0.6pt dashed #777; }
+.card { border-right: 0.6pt dashed #777; border-bottom: 0.6pt dashed #777; padding: 7mm; break-inside: avoid; page-break-inside: avoid; }
+.card-inner { height: 100%; border: 0.9pt solid #111; border-radius: 3mm; padding: 5mm 5mm 4mm; display: flex; flex-direction: column; }
+.card h3 { margin: 0 0 4mm; font-size: 1.5em; line-height: 1.2; font-weight: 600; }
+.card-meta { margin-top: auto; font-size: 0.75em; color: #595959; }    /* set name · number, bottom of the card */
+.steps { margin: 0; padding: 0; list-style: none; counter-reset: step; }
+.steps li { counter-increment: step; position: relative; padding-left: 10.5mm; margin-bottom: 3.5mm; line-height: 1.35; }
+.steps li::before {
+  content: counter(step); position: absolute; left: 0; top: 0.05em; width: 7mm; height: 7mm; border: 0.9pt solid #111;
+  border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8em; font-weight: 600; line-height: 1;
+}
+
+/* ===== Teacher pages inside a pupil file (Lösungsblatt, notes). Last block on purpose: it must win over the
+   pupil rules above for h1/h2 inside the insert. ===== */
+.band {                                                                 /* "NUR FÜR DIE LEHRKRAFT" [must on teacher material in pupil files] */
+  display: inline-block; background: #111; color: #fff; font-size: 8.5pt; font-weight: 600; letter-spacing: 0.12em;
+  text-transform: uppercase; padding: 1.3mm 3mm 1.1mm; border-radius: 1.5pt; margin-bottom: 4mm;
+}
+.teacher-insert { page: teacher-insert; break-before: page; page-break-before: always; font-size: 10pt; line-height: 1.36; }
+.teacher-insert h1 { margin: 0 0 7mm; padding-bottom: 4mm; font-size: 20pt; line-height: 1.15; font-weight: 600; border-bottom: 1pt solid #111; }
+.teacher-insert h2 { margin: 0 0 4mm; font-size: 12pt; line-height: 1.2; }
+.teacher-insert h2.chapter { font-size: 13pt; margin: 8mm 0 4mm; }

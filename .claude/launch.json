@@ -1,0 +1,23 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "chalkless",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-u", "kern/webapp/server.py", "--port", "8765", "--no-browser"],
+      "port": 8765
+    },
+    {
+      "name": "chalkless-py",
+      "runtimeExecutable": "py",
+      "runtimeArgs": ["-3", "-u", "kern/webapp/server.py", "--port", "8765", "--no-browser"],
+      "port": 8765
+    },
+    {
+      "name": "chalkless-python3",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["-u", "kern/webapp/server.py", "--port", "8765", "--no-browser"],
+      "port": 8765
+    }
+  ]
+}

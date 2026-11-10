@@ -1,0 +1,7 @@
+pypdf>=4          # read PDF examples, report page facts of exports
+pypdfium2>=4      # page images of PDFs for the output check (pdf_export.py --png)
+pillow>=10        # writes those page images as PNG
+python-docx>=1.1  # optional: Word copies on request (html_export_base.py)
+playwright>=1.40  # slide check: renders every build step in the installed Edge/Chrome (channel); no browser download
+# Install only through kern/tools/voraussetzungen.py --install: it checks that every version that would be
+# installed, including all dependencies, was published at least 48 hours ago; unverifiable ages block the installation.

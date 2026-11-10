@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>Jahresplan · Beispielfach 2026/27</title>
+<!-- EXAMPLE, synthetic: fictitious subject "Beispielfach", fictitious framework "Beispielrahmen" (Kompetenzbereiche
+     KB 1–4), invented example calendar: every holiday and free day is made up and ends in "(Beispiel)". Real calendar
+     dates are used only so that every date matches its weekday. Section 5 is the unit in sequenz.html.
+     Shows the two passes of skill jahresplan: the overview of all sections, then one section worked out.
+     STRUCTURE (keep): chalkless.* meta tags, one per field (kern/konventionen.md §2). -->
+<meta name="chalkless.titel" content="Jahresplan Beispielfach 2026/27">
+<meta name="chalkless.typ" content="jahresplan">
+<meta name="chalkless.bereich" content="beispielklasse-beispielfach">
+<meta name="chalkless.datum" content="2026-09-14">
+<meta name="chalkless.status" content="entwurf">
+<meta name="chalkless.vorlage" content="standard">
+<meta name="chalkless.vorlage_version" content="0">
+<link rel="stylesheet" href="../standard.css">
+<style>
+/* CONTEXT decision: a year plan is almost only table, so the whole document is landscape (dokumente.md §3, principle 9). */
+@page landscape { @top-left { content: "Jahresplan · Beispielfach 2026/27"; } }
+@page landscape:first { @top-left { content: none; } }
+.landscape > .sec { max-width: 261mm; }
+.t-table + .table-note { max-width: none; }
+.closing { margin-top: 4mm; }
+</style>
+</head>
+<body class="teacher">
+<section class="landscape" id="jahresplan">
+
+<header class="sec title-block" id="titel">
+  <div class="label">Jahresplan</div>
+  <div class="body"><h1>Beispielfach · Schuljahr 2026/27</h1></div>
+</header>
+
+<section class="sec" id="kopf">
+  <div class="label"><span class="nr">1</span>Kopfdaten</div>
+  <div class="body">
+    <dl class="head-data two-col">
+      <dt>Fach</dt><dd>Beispielfach</dd>
+      <dt>Lerngruppe</dt><dd>Beispielklasse (fiktiv)</dd>
+      <dt>Stunden</dt><dd>2 pro Woche (Di, Fr) · 73 im Schuljahr (gezählt, siehe 3)</dd>
+      <dt>Lehrkraft</dt><dd>[Name]</dd>
+      <dt>Kalender</dt><dd>erfundener Beispielkalender, 14.09.2026–23.07.2027</dd>
+      <!-- STRUCTURE: say truthfully what exists (rubric D5): overview plus one worked section, nothing confirmed yet. -->
+      <dt>Stand</dt><dd>Übersicht und Abschnitt 2 ausgearbeitet; Entwurf</dd>
+    </dl>
+  </div>
+</section>
+
+<!-- STRUCTURE: pass 1 = overview. Most-scanned value first (section and period); lessons per section counted from the
+     calendar; group rows per half-year in tbody.group-block (never stranded); holiday rows between sections; buffer;
+     the sum row is the only row with the double rule. Widths sum to 261 mm. -->
+<h2 id="uebersicht-titel"><span class="nr">2</span>Übersicht der Abschnitte</h2>
+<table class="t-table" id="uebersicht">
+  <colgroup>
+    <col style="width:36mm"><col style="width:13mm"><col style="width:56mm"><col style="width:96mm"><col style="width:20mm"><col style="width:40mm">
+  </colgroup>
+  <thead>
+    <tr><th>Abschnitt</th><th>Std.</th><th>Thema</th><th>Schwerpunkte</th><th>Lehr&shy;plan<sup>1</sup></th><th>Hinweise</th></tr>
+  </thead>
+  <tbody class="group-block">
+    <tr class="group"><td colspan="6">1. Halbjahr · 30 Stunden</td></tr>
+    <tr>
+      <td class="key">1 <span class="sub">14.09.–09.10.</span></td><td class="key">8</td>
+      <td>Ankommen: Arbeitsweisen im Beispielfach</td>
+      <td>Heft und Ordnung, genau beobachten, Fragen stellen, Regeln für Partnerarbeit</td>
+      <td>KB 1</td><td>Lernstand in Stunde 1–2</td>
+    </tr>
+    <tr>
+      <td class="key">2 <span class="sub">12.10.–13.11.</span></td><td class="key">8</td>
+      <td>Messen und Schätzen</td>
+      <td>Längen, Zeit und Gewicht erst schätzen, dann messen; Messprotokoll</td>
+      <td>KB 2</td><td>ohne Herbstferien; ausgearbeitet in 5</td>
+    </tr>
+  </tbody>
+  <tbody>
+    <tr>
+      <td class="key">3 <span class="sub">16.11.–22.12.</span></td><td class="key">10</td>
+      <td>Beobachten und Protokollieren</td>
+      <td>Beobachtungsaufträge, Skizze mit Beschriftung, Tabelle, Ergebnis in einem Satz</td>
+      <td>KB 1, KB 3</td><td>ohne Fr 20.11.</td>
+    </tr>
+    <tr class="holiday"><td class="key">–</td><td colspan="5">23.12.–08.01. · Winterferien (Beispiel)</td></tr>
+    <tr>
+      <td class="key">4 <span class="sub">11.01.–22.01.</span></td><td class="key">4</td>
+      <td>Wiederholen und Vertiefen</td>
+      <td>Rückblick auf Abschnitt 1–3, Übungsstationen nach Lernstand</td>
+      <td>KB 1–3</td><td>Ende 1. Halbjahr</td>
+    </tr>
+  </tbody>
+  <tbody class="group-block">
+    <tr class="group"><td colspan="6">2. Halbjahr · 43 Stunden</td></tr>
+    <tr>
+      <td class="key">5 <span class="sub">25.01.–05.03.</span></td><td class="key">9</td>
+      <td>Karten lesen und selbst zeichnen</td>
+      <td>Draufsicht, Legende, Himmelsrichtungen, Maßstabsleiste, eigene Wegskizze</td>
+      <td>KB 2, KB 4</td><td>eigener Sequenzplan (8 + 1 Puffer)</td>
+    </tr>
+    <tr>
+      <td class="key">6 <span class="sub">08.03.–26.03.</span></td><td class="key">6</td>
+      <td>Ordnen und Vergleichen</td>
+      <td>nach Merkmalen sortieren, Ordnung begründen, Vergleichstabellen</td>
+      <td>KB 3</td><td></td>
+    </tr>
+  </tbody>
+  <tbody>
+    <tr class="holiday"><td class="key">–</td><td colspan="5">29.03.–09.04. · Osterferien (Beispiel)</td></tr>
+    <tr>
+      <td class="key">7 <span class="sub">12.04.–14.05.</span></td><td class="key">10</td>
+      <td>Projekt: Unser Weg zur Schule</td>
+      <td>beobachten, messen, kartieren und vorstellen – Abschnitte 2, 3 und 5 angewendet</td>
+      <td>KB 1–4</td><td>Do 06.05. Feiertag: kein Termin betroffen</td>
+    </tr>
+    <tr class="holiday"><td class="key">–</td><td colspan="5">18.05.–21.05. · Pfingstferien (Beispiel)</td></tr>
+    <tr>
+      <td class="key">8 <span class="sub">24.05.–25.06.</span></td><td class="key">10</td>
+      <td>Präsentieren und Rückmelden</td>
+      <td>Ergebnisse vorstellen, Kriterien für Rückmeldungen, überarbeiten</td>
+      <td>KB 4</td><td></td>
+    </tr>
+    <tr>
+      <td class="key">9 <span class="sub">28.06.–16.07.</span></td><td class="key">6</td>
+      <td>Rückblick und Abschluss</td>
+      <td>Lernweg des Jahres, eigene Lieblingsergebnisse, Ausblick</td>
+      <td>KB 1–4</td><td></td>
+    </tr>
+    <tr class="buffer"><td class="key">P <span class="sub">20.07.–23.07.</span></td><td class="key">2</td><td>Puffer</td><td colspan="3">für Ausfall im Lauf des Jahres; sonst Ausstellung der Projektergebnisse</td></tr>
+    <tr class="sum"><td class="key">Summe</td><td class="key">73</td><td colspan="4">30 + 43 Stunden; davon 3 Puffer (1 in Abschnitt 5, 2 am Ende)</td></tr>
+  </tbody>
+</table>
+<p class="table-note"><sup>1</sup> KB = Kompetenzbereich des fiktiven Beispielrahmens. In einer echten Planung stehen hier die Bezeichnungen aus einem geprüften Baustein mit Fundstelle, sonst <span class="pruefen">[PRÜFEN: Lehrplanbezug]</span>.</p>
+
+<!-- DEFAULT G1 (dokumente.md §3), not confirmed: short closing parts stay on the landscape page of the table they
+     close (here the overview), instead of opening a near-empty page. -->
+<div class="closing">
+  <!-- STRUCTURE: the count is traceable (skill jahresplan, step 2). In a teacher's instance it goes into
+       <file>.abdeckung.md unless their template has such a part; the reference example shows it in place. -->
+  <section class="sec" id="zaehlung">
+    <div class="label"><span class="nr">3</span>Zählung</div>
+    <div class="body"><p>Di und Fr, 14.09.2026–23.07.2027: 90 Termine − 17 (Ferien 15, Fr 20.11., Fr 05.02.) = 73 Stunden; Sa 03.10. und Do 06.05. kosten keine. Bewegliche Ferientage, schuleigene Termine: nicht eingetragen (Annahme, gehen vom Puffer ab).</p></div>
+  </section>
+  <section class="sec" id="abdeckung">
+    <div class="label"><span class="nr">4</span>Abdeckung, offen</div>
+    <div class="body"><p>KB 1: Abschnitte 1, 3, 4, 7, 9 · KB 2: 2, 4, 5, 7, 9 · KB 3: 3, 4, 6, 7, 9 · KB 4: 5, 7, 8, 9 – jeder Bereich eingeplant. <strong>Noch zu prüfen:</strong> Lehrplanbezug (Baustein nicht geprüft, siehe Markierung); schuleigene Termine.</p></div>
+  </section>
+</div>
+
+<!-- STRUCTURE: pass 2 = one section per request, rows per lesson with date. A forced page break; the top margin of
+     the heading is reset (dokumente.md §4, headings). -->
+<h2 class="page-break" id="abschnitt2-titel" style="margin-top:0"><span class="nr">5</span>Abschnitt 2 ausgearbeitet: Messen und Schätzen (8 Stunden)</h2>
+<table class="t-table" id="abschnitt2">
+  <colgroup>
+    <col style="width:22mm"><col style="width:60mm"><col style="width:104mm"><col style="width:20mm"><col style="width:55mm">
+  </colgroup>
+  <thead>
+    <tr><th>Stunde</th><th>Thema</th><th>Inhalt kurz</th><th>Lehr&shy;plan<sup>1</sup></th><th>Hinweise</th></tr>
+  </thead>
+  <tbody>
+    <tr><td class="key">1 <span class="sub">Di 13.10.</span></td><td>Wie lang ist das?</td><td>Längen im Klassenraum schätzen, Schätzungen notieren und vergleichen</td><td>KB 2</td><td>Schätzliste bleibt bis Stunde 8</td></tr>
+    <tr><td class="key">2 <span class="sub">Fr 16.10.</span></td><td>Messen mit dem Körper</td><td>Schritt, Spanne, Fuß; warum Ergebnisse verschieden ausfallen</td><td>KB 2</td><td></td></tr>
+    <tr><td class="key">3 <span class="sub">Di 20.10.</span></td><td>Lineal und Maßband</td><td>richtig anlegen, bei null beginnen, ablesen; Zentimeter und Meter</td><td>KB 2</td><td>Maßbänder ausleihen</td></tr>
+    <tr><td class="key">4 <span class="sub">Fr 23.10.</span></td><td>Messen und notieren</td><td>ein Messprotokoll als Tabelle führen: Gegenstand, Schätzung, Messung</td><td>KB 2, KB 3</td><td></td></tr>
+    <tr class="holiday"><td class="key">–</td><td colspan="4">26.10.–30.10. · Herbstferien (Beispiel)</td></tr>
+    <tr><td class="key">5 <span class="sub">Di 03.11.</span></td><td>Zeit schätzen und messen</td><td>eine Minute schätzen, mit der Stoppuhr prüfen; Dauer von Tätigkeiten</td><td>KB 2</td><td>Stoppuhren</td></tr>
+    <tr><td class="key">6 <span class="sub">Fr 06.11.</span></td><td>Was ist schwerer?</td><td>Gewichte in der Hand vergleichen, mit der Balkenwaage prüfen</td><td>KB 2</td><td>Balkenwaagen</td></tr>
+    <tr><td class="key">7 <span class="sub">Di 10.11.</span></td><td>Messstationen</td><td>Stationen zu Länge, Zeit und Gewicht; Pflicht- und Wahlstationen</td><td>KB 2</td><td>Laufzettel mit Reihenfolge</td></tr>
+    <tr><td class="key">8 <span class="sub">Fr 13.11.</span></td><td>Rückblick: Schätzen und Messen</td><td>Schätzliste aus Stunde 1 mit Messungen vergleichen; was beim Schätzen hilft</td><td>KB 2</td><td></td></tr>
+  </tbody>
+</table>
+
+
+</section>
+</body>
+</html>

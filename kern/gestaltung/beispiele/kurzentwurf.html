@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>Kurzentwurf · Brüche mit gleichem Nenner vergleichen</title>
+<!-- STRUCTURE (keep): chalkless.* meta tags, one per field (kern/konventionen.md §2).
+     vorlage "standard" / vorlage_version "0" = the core default layout, no template of the teacher's own yet. -->
+<meta name="chalkless.titel" content="Brüche mit gleichem Nenner vergleichen">
+<meta name="chalkless.typ" content="stunde">
+<meta name="chalkless.bereich" content="6b-mathe">
+<meta name="chalkless.datum" content="2026-11-24">
+<meta name="chalkless.status" content="entwurf">
+<meta name="chalkless.vorlage" content="standard">
+<meta name="chalkless.vorlage_version" content="0">
+<!-- STRUCTURE: the stylesheet. Relative link while working; for a self-contained hand-in file replace this <link>
+     with <style> … the full contents of kern/gestaltung/standard.css … </style>. The PDF export works with both. -->
+<link rel="stylesheet" href="../standard.css">
+<style>
+/* RECIPE: document-specific additions go here, after standard.css.
+   The running head cannot read the title from the page in the current export, so it is typed once here.
+   The status text in @bottom-left stays "Entwurf" (default) until the teacher says the plan is fine. */
+@page { @top-left { content: "Kurzentwurf · Brüche mit gleichem Nenner vergleichen"; } }
+/* RECIPE: repeat the page-1 rule after the running head; in the current export the later rule wins over :first. */
+@page :first { @top-left { content: none; } }
+</style>
+</head>
+<!-- STRUCTURE: body class selects the register (teacher | pupil). -->
+<body class="teacher">
+
+<!-- STRUCTURE: title block = document type label (left) + title (right), 1 pt rule. -->
+<header class="sec title-block" id="titel">
+  <div class="label">Kurzentwurf</div>
+  <div class="body"><h1>Brüche mit gleichem Nenner vergleichen</h1></div>
+</header>
+
+<!-- STRUCTURE: Kopfdaten as a term/value grid. Which fields appear is a question for the teacher's template
+     (herkunft.md); the ones below are a plausible default. "[Name]" marks a blank a real document fills by hand. -->
+<section class="sec" id="kopf">
+  <div class="label"><span class="nr">1</span>Kopfdaten</div>
+  <div class="body">
+    <dl class="head-data">
+      <dt>Fach</dt><dd>Mathematik</dd>
+      <dt>Klasse</dt><dd>6b (26 Schülerinnen und Schüler)</dd>
+      <dt>Datum</dt><dd>Dienstag, 24. November 2026</dd>
+      <dt>Zeit</dt><dd>8:45–9:30 Uhr (2. Stunde, 45 Minuten)</dd>
+      <dt>Lehrkraft</dt><dd>[Name]</dd>
+      <dt>Thema der Sequenz</dt><dd>Brüche – Anteile beschreiben und vergleichen (3. von 8 Stunden)</dd>
+      <dt>Thema der Stunde</dt><dd>Brüche mit gleichem Nenner vergleichen und ordnen</dd>
+      <!-- STRUCTURE: an unverified curriculum reference is never quoted; it is marked and named once at the end. -->
+      <dt>Lehrplanbezug</dt><dd>Mathematik 6, Lernbereich „Brüche“ – <span class="pruefen">[PRÜFEN: Lehrplanbezug]</span></dd>
+    </dl>
+  </div>
+</section>
+
+<!-- STRUCTURE: label-column sections in the order the teacher's template prescribes. Numbering is a RECIPE. -->
+<section class="sec" id="voraussetzungen">
+  <div class="label"><span class="nr">2</span>Lern&shy;voraussetzungen</div>
+  <div class="body">
+    <p>Die Klasse kennt Brüche als Anteile eines Ganzen aus den ersten beiden Stunden der Sequenz. Die Schülerinnen und Schüler lesen und schreiben Brüche, benennen Zähler und Nenner und stellen Brüche wie <span class="nums">3/8</span> am Bruchstreifen und am Kreismodell dar. Die Bruchstreifen (Achtel bis Fünfzehntel) liegen als laminierte Sätze für die Partnerarbeit bereit und wurden in der letzten Stunde eingeführt. Die Vergleichszeichen &lt; und &gt; sind aus dem Umgang mit natürlichen Zahlen bekannt; einige Kinder vertauschen sie noch. Die Klasse arbeitet in festen Sitzpaaren; der Wechsel zwischen Plenum und Partnerarbeit ist eingeübt.</p>
+  </div>
+</section>
+
+<section class="sec" id="ziele">
+  <div class="label"><span class="nr">3</span>Lernziele</div>
+  <div class="body">
+    <p><strong>Grobziel:</strong> Die Schülerinnen und Schüler vergleichen Brüche mit gleichem Nenner, begründen den Vergleich am Modell und formulieren die Regel dafür.</p>
+    <p style="margin-bottom:0.4em"><strong>Feinziele:</strong> Die Schülerinnen und Schüler …</p>
+    <ol>
+      <li>vergleichen zwei Brüche mit gleichem Nenner und setzen das Zeichen &lt; oder &gt; richtig.</li>
+      <li>begründen den Vergleich mit dem Bruchstreifen: gleich große Stücke, unterschiedlich viele.</li>
+      <li>ordnen vier Brüche mit gleichem Nenner der Größe nach.</li>
+      <li>formulieren die Regel: Bei gleichem Nenner ist der Bruch mit dem größeren Zähler größer.</li>
+    </ol>
+  </div>
+</section>
+
+<section class="sec" id="ueberlegungen">
+  <div class="label"><span class="nr">4</span>Didaktisch-methodische Überlegungen (Kurzfassung)</div>
+  <div class="body">
+    <p>Der Einstieg über zwei gleich große, gleich geschnittene Pizzen macht die Bedingung „gleicher Nenner“ sichtbar, bevor sie benannt wird: Die Stücke sind gleich groß, also entscheidet die Anzahl. Die Regel wird nicht vorgegeben, sondern nach der Partnerarbeit aus den eigenen Vergleichen formuliert und erst dann im Lückentext gesichert. Die Bedingung „gleicher Nenner“ wird von Anfang an mitgesprochen, damit die Regel in der nächsten Stunde (gleicher Zähler, verschiedene Nenner) nicht übergeneralisiert wird. Der Bruchstreifen bleibt die ganze Stunde das Begründungsmittel; wer das Zeichen vertauscht, legt die beiden Streifen untereinander und sieht die Richtung. Das Ordnen von vier Brüchen in Aufgabe 3 überträgt den Paarvergleich auf eine Reihe; der Sonderfall <span class="nums">7/7 = 1</span> bereitet die nächste Stunde vor.</p>
+  </div>
+</section>
+
+<!-- STRUCTURE: the Verlaufsplan on a landscape page (class landscape = named page). Column set and order follow the
+     teacher's template; here a common six-column shape. Widths in the colgroup sum to 261 mm (297 − 18 − 18).
+     The header row repeats on every page because thead is a table-header-group (standard.css). -->
+<section class="landscape" id="verlauf">
+  <h2><span class="nr">5</span>Verlaufsplan</h2>
+  <table class="t-table">
+    <colgroup>
+      <col style="width:17mm"><col style="width:30mm"><col style="width:90mm"><col style="width:36mm"><col style="width:38mm"><col style="width:50mm">
+    </colgroup>
+    <thead>
+      <tr>
+        <th>Zeit</th><th>Phase</th><th>Unterrichtsgeschehen (Lehrkraft / Schülerinnen und Schüler)</th><th>Sozialform / Methode</th><th>Medien / Material</th><th>Didaktischer Kommentar</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="key nowrap">8:45 <span class="sub">(5 Min)</span></td>
+        <td class="key">Einstieg</td>
+        <td>L zeigt zwei gleich große Pizzen, beide in 8 Stücke geschnitten; bei der ersten fehlen 3 Stücke, bei der zweiten 5. Impuls: „Von welcher Pizza wurde mehr gegessen? Woran siehst du das?“ Erwartet: „Von der zweiten, da fehlen fünf Stücke.“ L notiert <span class="nums">3/8</span> und <span class="nums">5/8</span> an der Tafel.</td>
+        <td>Plenum, stummer Impuls</td>
+        <td>Dokumentenkamera, zwei Pizzabilder, Tafel</td>
+        <td>Alltagskontext; beide Pizzen gleich groß und gleich geschnitten – der gleiche Nenner steckt schon im Bild. Noch keine Erklärung durch L.</td>
+      </tr>
+      <tr>
+        <td class="key nowrap">8:50 <span class="sub">(5 Min)</span></td>
+        <td class="key">Hinführung und Zielangabe</td>
+        <td>SuS begründen: „Fünf Stücke sind mehr als drei, und die Stücke sind gleich groß.“ L: „Heute vergleicht ihr Brüche – zuerst solche, bei denen die Stücke gleich groß sind. Woran erkennt man das am Bruch?“ Erwartet: „Am Nenner.“ L schreibt das Stundenthema an.</td>
+        <td>Plenum, Lehrgespräch</td>
+        <td>Tafel</td>
+        <td>Die Bedingung „gleicher Nenner“ wird ausgesprochen, bevor gerechnet wird. Transparenz über das Stundenziel.</td>
+      </tr>
+      <tr>
+        <td class="key nowrap">8:55 <span class="sub">(12 Min)</span></td>
+        <td class="key">Erarbeitung – Vergleichen</td>
+        <td>Partnerarbeit mit Bruchstreifen: Aufgabe 1 des Arbeitsblatts, sechs Bruchpaare mit gleichem Nenner (Achtel bis Fünfzehntel). SuS tragen &lt; oder &gt; ein und prüfen jeden Vergleich, indem sie beide Streifen untereinanderlegen. L fragt nach Begründungen („Warum ist <span class="nums">7/10</span> größer als <span class="nums">4/10</span>?“). Hilfe: Tipp-Kasten auf dem Arbeitsblatt. Schnelle Paare beginnen die Sternchenaufgabe.</td>
+        <td>Partnerarbeit</td>
+        <td>Arbeitsblatt, 13 Sätze Bruchstreifen (laminiert)</td>
+        <td>Enaktiv vor symbolisch. Die Richtung des Zeichens ist die häufigste Fehlerquelle; der Streifenvergleich zeigt sie unmittelbar. Differenzierung: Sternchenaufgabe nach oben, Tipp-Kasten und Begleitung durch L nach unten.</td>
+      </tr>
+      <tr>
+        <td class="key nowrap">9:07 <span class="sub">(8 Min)</span></td>
+        <td class="key">Sicherung – Regel</td>
+        <td>Ein Paar legt unter der Dokumentenkamera die Streifen für <span class="nums">7/10</span> und <span class="nums">4/10</span>; Ergebnisse von Aufgabe 1 vergleichen. SuS formulieren die Regel in eigenen Worten, L sichert an der Tafel: „Haben zwei Brüche den gleichen Nenner, so sind alle Stücke gleich groß. Dann vergleichst du die Zähler: Je größer der Zähler, desto größer ist der Bruch.“ SuS füllen den Lückentext (Aufgabe 2) aus.</td>
+        <td>Plenum → Einzelarbeit</td>
+        <td>Dokumentenkamera, Tafel, Arbeitsblatt, Heft</td>
+        <td>Die Regel ist Ergebnis der eigenen Arbeit, nicht Vorgabe. Der Lückentext verwendet genau die Tafelformulierung und wiederholt die Begriffe Zähler und Nenner.</td>
+      </tr>
+      <tr>
+        <td class="key nowrap">9:15 <span class="sub">(10 Min)</span></td>
+        <td class="key">Übung – Ordnen</td>
+        <td>Aufgabe 3: SuS ordnen zwei Bruchreihen (Neuntel, Siebtel) der Größe nach in die Tabelle, links der kleinste. Partnerkontrolle: Bei Unterschieden werden die Streifen gelegt. Kurze Besprechung des Sonderfalls <span class="nums">7/7</span>: „Alle sieben Stücke – die ganze Pizza, also 1.“ Wer fertig ist, bearbeitet die Sternchenaufgabe (alle Zehntel zwischen <span class="nums">3/10</span> und <span class="nums">7/10</span>).</td>
+        <td>Einzelarbeit, Partnerkontrolle</td>
+        <td>Arbeitsblatt, Bruchstreifen</td>
+        <td>Vom Paarvergleich zur Reihe. <span class="nums">7/7 = 1</span> wird nur benannt, nicht vertieft; die Sternchenaufgabe kehrt die Fragerichtung um (Brüche zwischen zwei Grenzen finden).</td>
+      </tr>
+      <tr>
+        <td class="key nowrap">9:25 <span class="sub">(5 Min)</span></td>
+        <td class="key">Abschluss und Ausblick</td>
+        <td>Blitzvergleich an der Tafel: <span class="nums">2/9</span> und <span class="nums">7/9</span>; <span class="nums">5/5</span> und <span class="nums">3/5</span>; <span class="nums">6/11</span> und <span class="nums">10/11</span>. SuS zeigen per Handzeichen, ob der linke oder der rechte Bruch größer ist. Ausblick: „Und wenn die Nenner verschieden sind – ist <span class="nums">1/2</span> oder <span class="nums">1/3</span> mehr?“ L nennt die Hausaufgabe.</td>
+        <td>Plenum</td>
+        <td>Tafel</td>
+        <td>Schnelle Lernzielkontrolle für alle. Die Ausblicksfrage ist der Haken für die nächste Stunde (gleicher Zähler, verschiedene Nenner).</td>
+      </tr>
+      <!-- STRUCTURE: the sum row shows that the phases add up to the lesson length (rubric A5). -->
+      <tr class="sum">
+        <td class="key">Summe</td>
+        <td colspan="5">5 + 5 + 12 + 8 + 10 + 5 = 45 Minuten</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- DEFAULT G1 (dokumente.md §3), not confirmed: the closing sections are short, so they stay on the last landscape page in a bounded measure
+       (class closing, max 175 mm) instead of opening a near-empty portrait page. If they grew beyond about a third of
+       a page, move them out of this section and start a portrait page (class page-break). -->
+  <div class="closing">
+    <section class="sec" id="hausaufgabe">
+      <div class="label"><span class="nr">6</span>Hausaufgabe</div>
+      <div class="body">
+        <p>Drei eigene Bruchpaare mit gleichem Nenner aufschreiben und mit &lt; oder &gt; vergleichen; zu einem der Paare die beiden Bruchstreifen ins Heft zeichnen.</p>
+      </div>
+    </section>
+    <section class="sec" id="reserve">
+      <div class="label"><span class="nr">7</span>Reserve, Ausstieg, Material</div>
+      <div class="body">
+        <ul>
+          <li><strong>Reserve (falls Zeit bleibt):</strong> Alle Brüche mit dem Nenner 12 finden, die zwischen <span class="nums">5/12</span> und <span class="nums">9/12</span> liegen (<span class="nums">6/12</span>, <span class="nums">7/12</span>, <span class="nums">8/12</span>).</li>
+          <li><strong>Alternativer Ausstieg (falls die Zeit knapp wird):</strong> Aufgabe 3 b) wird zur Hausaufgabe; der Blitzvergleich bleibt, da er die Lernzielkontrolle trägt.</li>
+          <li><strong>Material:</strong> 26 Arbeitsblätter, 13 Sätze Bruchstreifen, zwei Pizzabilder für die Dokumentenkamera, Lösungsblatt (1×, nur für die Lehrkraft).</li>
+          <li><strong>Noch zu prüfen:</strong> Lehrplanbezug in den Kopfdaten (Baustein noch nicht geprüft, siehe Markierung).</li>
+        </ul>
+      </div>
+    </section>
+  </div>
+</section>
+
+</body>
+</html>

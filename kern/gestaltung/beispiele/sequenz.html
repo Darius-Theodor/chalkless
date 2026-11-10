@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>Sequenzplan · Karten lesen und selbst zeichnen</title>
+<!-- EXAMPLE, synthetic: fictitious subject "Beispielfach", fictitious framework "Beispielrahmen", invented example
+     calendar (holiday names end in "(Beispiel)"). Real calendar dates are used only so that every date matches its
+     weekday; nothing here is a real school, class, curriculum text or holiday. Same unit as section 5 of jahresplan.html.
+     STRUCTURE (keep): chalkless.* meta tags, one per field (kern/konventionen.md §2). -->
+<meta name="chalkless.titel" content="Karten lesen und selbst zeichnen">
+<meta name="chalkless.typ" content="sequenz">
+<meta name="chalkless.bereich" content="beispielklasse-beispielfach">
+<meta name="chalkless.datum" content="2027-01-26">
+<meta name="chalkless.status" content="entwurf">
+<meta name="chalkless.vorlage" content="standard">
+<meta name="chalkless.vorlage_version" content="0">
+<!-- STRUCTURE: stylesheet. Relative link while working; inline standard.css for a self-contained hand-in file. -->
+<link rel="stylesheet" href="../standard.css">
+<style>
+/* CONTEXT decision: the unit plan is mostly table, so the whole document is landscape (dokumente.md §3, principle 9).
+   The first page of a landscape-only document is a named "landscape" page, so the running head is typed for that
+   page name and suppressed on page 1 by the landscape:first rule, which must come after it. */
+@page { @top-left { content: "Sequenzplan · Karten lesen und selbst zeichnen"; } }
+@page landscape { @top-left { content: "Sequenzplan · Karten lesen und selbst zeichnen"; } }
+@page landscape:first { @top-left { content: none; } }
+/* RECIPE: on a landscape page the label column of the title block and the Kopfdaten keep their teacher-register sizes. */
+.landscape > .sec { max-width: 261mm; }
+</style>
+</head>
+<body class="teacher">
+<section class="landscape" id="sequenz">
+
+<!-- STRUCTURE: title block = document type label + title. -->
+<header class="sec title-block" id="titel">
+  <div class="label">Sequenzplan</div>
+  <div class="body"><h1>Karten lesen und selbst zeichnen</h1></div>
+</header>
+
+<!-- STRUCTURE: Kopfdaten in four columns on a landscape page (.two-col). Which fields exist is a question of the
+     requirement and the teacher's template (dokumente.md §1, levels 1 and 4). -->
+<section class="sec" id="kopf">
+  <div class="label"><span class="nr">1</span>Kopfdaten</div>
+  <div class="body">
+    <dl class="head-data two-col">
+      <dt>Fach</dt><dd>Beispielfach</dd>
+      <dt>Lerngruppe</dt><dd>Beispielklasse (fiktiv)</dd>
+      <dt>Zeitraum</dt><dd>Di 26.01. – Fr 05.03.2027, Di und Fr</dd>
+      <dt>Umfang</dt><dd>8 Stunden + 1 Puffer (gezählt, siehe 4)</dd>
+      <dt>Einordnung</dt><dd>Jahresplan, Abschnitt 5</dd>
+      <dt>Lehrkraft</dt><dd>[Name]</dd>
+      <!-- STRUCTURE: curriculum reference. With a building block of status "geprüft" this cell holds the verbatim text
+           in quotation marks with its location, e.g. „…“ (lehrplan/<fach>.md, <heading/number>); every omission is
+           marked […]. The framework here is fictitious and has no verified block, so the reference is marked. -->
+      <dt>Lehrplanbezug</dt><dd>Beispielrahmen, Kompetenzbereich 2 „Orientieren“ <span class="pruefen">[PRÜFEN: Lehrplanbezug]</span></dd>
+      <dt>Ziel der Sequenz</dt><dd>Die Lernenden lesen einfache Karten und beschreiben und zeichnen damit einen Weg.</dd>
+    </dl>
+  </div>
+</section>
+
+<!-- STRUCTURE: the overview table. Columns: the most-scanned value first (lesson number and date). One distinct goal
+     per lesson (rubric B, Unit). Widths sum to 261 mm (297 − 18 − 18). The header row repeats on every page. -->
+<h2 id="uebersicht-titel"><span class="nr">2</span>Übersicht der Stunden</h2>
+<table class="t-table" id="uebersicht">
+  <colgroup>
+    <col style="width:20mm"><col style="width:37mm"><col style="width:62mm"><col style="width:85mm"><col style="width:35mm"><col style="width:22mm">
+  </colgroup>
+  <thead>
+    <tr><th>Stunde</th><th>Thema</th><th>Ziel (Die Lernenden …)</th><th>Inhalte und Methoden</th><th>Material</th><th>Lehr&shy;plan<sup>1</sup></th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="key">1 <span class="sub">Di 26.01.</span></td>
+      <td><strong>Einstieg:</strong> Wie finde ich den Weg?</td>
+      <td>beschreiben einen bekannten Weg im Schulhaus mündlich und benennen, was einer anderen Person dabei fehlt.</td>
+      <td>Partnerarbeit: Weg ohne Zeigen beschreiben, die andere Person geht ihn im Kopf nach; Sammeln, was fehlte (Richtung, Entfernung, Merkpunkte). Lernstand als Ausgangspunkt notieren.</td>
+      <td>Satzstreifen, Tafel</td>
+      <td>KB 2</td>
+    </tr>
+    <tr>
+      <td class="key">2 <span class="sub">Fr 29.01.</span></td>
+      <td>Was eine Karte zeigt</td>
+      <td>unterscheiden Ansicht und Draufsicht und zeichnen den Klassenraum von oben.</td>
+      <td>Gegenstände auf dem Tisch von der Seite und von oben betrachten; Grundriss des Klassenraums gemeinsam an der Tafel, dann eigene Skizze.</td>
+      <td>Alltagsgegenstände, Karopapier</td>
+      <td>KB 2</td>
+    </tr>
+    <tr>
+      <td class="key">3 <span class="sub">Di 02.02.</span></td>
+      <td>Zeichen und Legende</td>
+      <td>lesen Kartenzeichen mit Hilfe einer Legende und ergänzen eine Legende.</td>
+      <td>Kartenausschnitt mit sechs Zeichen; Zeichen deuten, Legende vervollständigen; eigenes Zeichen für einen Ort im Schulhaus erfinden.</td>
+      <td>Arbeitsblatt Legende</td>
+      <td>KB 2</td>
+    </tr>
+    <!-- STRUCTURE: a day without lessons is a holiday row (name only, colspan); it is not counted. -->
+    <tr class="holiday"><td class="key">–</td><td colspan="5">Fr 05.02. · schulfreier Tag (Beispiel)</td></tr>
+    <tr>
+      <td class="key">4 <span class="sub">Di 09.02.</span></td>
+      <td>Himmelsrichtungen</td>
+      <td>bestimmen die vier Himmelsrichtungen auf der Karte und im Raum.</td>
+      <td>Nordpfeil auf der Karte; im Raum Norden mit Hilfe der Karte bestimmen; Richtungsspiel „Zwei Schritte nach Osten“.</td>
+      <td>Kartenausschnitt, Richtungskarten</td>
+      <td>KB 2</td>
+    </tr>
+    <tr>
+      <td class="key">5 <span class="sub">Fr 12.02.</span></td>
+      <td>Entfernungen mit der Maßstabsleiste</td>
+      <td>messen Entfernungen auf der Karte und rechnen sie mit einer einfachen Maßstabsleiste in Meter um.</td>
+      <td>Erst schätzen, dann messen; Maßstabsleiste „1 cm = 50 m“; Hilfekarten in zwei Stufen; Wegbeschreibung mit Himmelsrichtungen als Wiederholung.</td>
+      <td>Arbeitsblatt Maßstab, Lineale, Hilfekarten, Lösung</td>
+      <td>KB 2, KB 4</td>
+    </tr>
+    <tr class="holiday"><td class="key">–</td><td colspan="5">15.–19.02. · Frühjahrsferien (Beispiel)</td></tr>
+    <tr>
+      <td class="key">6 <span class="sub">Di 23.02.</span></td>
+      <td>Eine Wegskizze zeichnen</td>
+      <td>zeichnen eine Skizze eines kurzen Wegs mit Nordpfeil, Legende und Maßstabsleiste.</td>
+      <td>Kriterien gemeinsam festlegen (Start, Ziel, Merkpunkte, Legende); Einzelarbeit; Checkliste zur Selbstkontrolle.</td>
+      <td>Karopapier, Checkliste</td>
+      <td>KB 2, KB 4</td>
+    </tr>
+    <tr>
+      <td class="key">7 <span class="sub">Fr 26.02.</span></td>
+      <td>Wege beschreiben und prüfen</td>
+      <td>beschreiben einen Weg nach der Skizze eines anderen Kindes und geben eine Rückmeldung zur Skizze.</td>
+      <td>Skizzen tauschen; Weg mündlich beschreiben; Rückmeldung nach der Checkliste aus Stunde 6.</td>
+      <td>Skizzen aus Stunde 6, Checkliste</td>
+      <td>KB 4</td>
+    </tr>
+    <tr>
+      <td class="key">8 <span class="sub">Di 02.03.</span></td>
+      <td><strong>Abschluss:</strong> zurück zum Anfang</td>
+      <td>beschreiben den Weg aus Stunde 1 erneut, jetzt mit einer Karte, und vergleichen beide Beschreibungen.</td>
+      <td>Notizen aus Stunde 1 hervorholen; neue Beschreibung mit Richtung, Entfernung und Merkpunkten; Vergleich im Gespräch.</td>
+      <td>Notizen aus Stunde 1, eigene Skizze</td>
+      <td>KB 2, KB 4</td>
+    </tr>
+    <!-- STRUCTURE: buffer row: number "P", content cells merged and grey. -->
+    <tr class="buffer"><td class="key">P <span class="sub">Fr 05.03.</span></td><td>Puffer</td><td colspan="4">für Ausfall oder Vertiefung; sonst: Skizzen ausstellen</td></tr>
+  </tbody>
+</table>
+<!-- STRUCTURE: column-level PRÜFEN as a table note instead of a marker in every cell. -->
+<p class="table-note" style="max-width:none"><sup>1</sup> KB = Kompetenzbereich des fiktiven Beispielrahmens; echt: wörtlich aus einem geprüften Baustein mit Fundstelle, sonst <span class="pruefen">[PRÜFEN: Lehrplanbezug]</span>.</p>
+
+<!-- DEFAULT G1 (dokumente.md §3), not confirmed: the closing parts are short, so they stay on the last landscape page
+     in a bounded measure. If they grew beyond about a third of a page they would start a portrait page. -->
+<div class="closing">
+  <section class="sec" id="bogen">
+    <div class="label"><span class="nr">3</span>Bogen der Sequenz</div>
+    <div class="body"><p>Wegbeschreibung ohne Karte (1) → Draufsicht, Legende, Richtung, Entfernung (2–5) → eigene Skizze (6–7) → dieselbe Aufgabe wie in Stunde 1, jetzt mit Karte (8).</p></div>
+  </section>
+  <!-- STRUCTURE: the count is traceable – slots, subtracted dates with reasons, result (skill sequenz, step 3). -->
+  <section class="sec" id="zaehlung">
+    <div class="label"><span class="nr">4</span>Zählung nach Kalender</div>
+    <div class="body"><p>Di und Fr, 26.01.–05.03.2027: 12 Termine, abzüglich Fr 05.02. (schulfreier Tag), Di 16.02. und Fr 19.02. (Frühjahrsferien) = 9 Stunden (8 + 1 Puffer). Wochentage nachgerechnet; erfundener Beispielkalender.</p></div>
+  </section>
+  <section class="sec" id="offen">
+    <div class="label"><span class="nr">5</span>Noch zu ergänzen, noch zu prüfen</div>
+    <div class="body">
+      <ul>
+        <li><strong>Noch zu ergänzen:</strong> Arbeitsblätter zu Stunde 3 und 5, Checkliste Wegskizze (Stunde 6). Hilfekarten und Lösung zu Stunde 5 liegen vor.</li>
+        <li><strong>Noch zu prüfen:</strong> Lehrplanbezug (Baustein nicht geprüft, siehe Markierung).</li>
+      </ul>
+    </div>
+  </section>
+</div>
+
+</section>
+</body>
+</html>

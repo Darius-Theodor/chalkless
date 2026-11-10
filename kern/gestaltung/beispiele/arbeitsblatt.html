@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>Arbeitsblatt · Brüche mit gleichem Nenner vergleichen</title>
+<!-- STRUCTURE (keep): chalkless.* meta tags (kern/konventionen.md §2). Same lesson as kurzentwurf.html. -->
+<meta name="chalkless.titel" content="Arbeitsblatt: Brüche mit gleichem Nenner vergleichen">
+<meta name="chalkless.typ" content="material">
+<meta name="chalkless.bereich" content="6b-mathe">
+<meta name="chalkless.datum" content="2026-11-24">
+<meta name="chalkless.status" content="entwurf">
+<meta name="chalkless.vorlage" content="standard">
+<meta name="chalkless.vorlage_version" content="0">
+<!-- STRUCTURE: stylesheet. Relative link while working; for a self-contained hand-in file replace the <link>
+     with <style> … full contents of kern/gestaltung/standard.css … </style>. -->
+<link rel="stylesheet" href="../standard.css">
+<style>
+/* CONTEXT decision: grade 6. The 13 pt default of body.pupil was sampled on grade 3–4 sheets; 12 pt reads as a
+   secondary-school worksheet while writing space stays generous. Stated here so the reason travels with the file. */
+body.pupil { font-size: 12pt; }
+/* RECIPE: pupil footer text is typed once per document (the export cannot read it from the page). */
+@page pupil { @bottom-left { content: "Brüche mit gleichem Nenner vergleichen · Arbeitsblatt"; } }
+/* CONTEXT: four tasks on one sheet for this age group; spacing a little tighter than the grade 3–4 defaults. */
+.task { margin-bottom: 4mm; }
+#sternchen { margin-bottom: 0; }
+.pupil h2 { margin-bottom: 2mm; }
+.instruction { margin-bottom: 3mm; }
+.box { margin-bottom: 3mm; }
+.name-line { margin-bottom: 4mm; }
+.pupil .title-block { margin-bottom: 5mm; }
+.gap-text { line-height: 1.7; }
+/* RECIPE, subject-specific: stacked fractions and an answer field for the comparison sign.
+   Additions like these belong in the document (or later in the teacher's own template), not in standard.css. */
+.frac { display: inline-flex; flex-direction: column; align-items: center; vertical-align: middle; line-height: 1.05; font-variant-numeric: tabular-nums; margin: 0 0.5mm; }
+.frac > span:first-child { border-bottom: 0.75pt solid #111; padding: 0 0.3em 0.1em; }
+.frac > span:last-child { padding: 0.1em 0.3em 0; }
+.cmp { display: inline-block; width: 10mm; height: 10mm; border: 0.75pt solid #111; border-radius: 2mm; vertical-align: middle; margin: 0 3mm; }
+.pairs { display: grid; grid-template-columns: 1fr 1fr 1fr; row-gap: 3mm; margin: 0 0 2.5mm; }
+.pairs > div { display: flex; align-items: center; gap: 1mm; }
+.pairs .letter { width: 7mm; }
+.given { white-space: nowrap; }
+.given .frac { margin: 0 1.5mm; }
+.p-table td { height: 12mm; }   /* CONTEXT: two-line fractions need a taller answer cell than the 10 mm default */
+</style>
+</head>
+<!-- STRUCTURE: body class pupil = pupil register and the pupil page (margins, footer with title and plain page number). -->
+<body class="pupil">
+
+<!-- STRUCTURE: Name line (Datum from grade 2 on). Widths are RECIPE. -->
+<div class="name-line">
+  <div><span class="field">Name:</span><span class="rule" style="width:80mm"></span></div>
+  <div><span class="field">Datum:</span><span class="rule" style="width:48mm"></span></div>
+</div>
+
+<!-- STRUCTURE: title block; the icon is optional (RECIPE: monochrome inline SVG that carries meaning – here a strip showing 5/8). -->
+<header class="title-block">
+  <svg viewBox="0 0 56 26" aria-hidden="true" focusable="false">
+    <rect x="1" y="1" width="54" height="24" fill="none" stroke="#111" stroke-width="1.6"/>
+    <rect x="1" y="1" width="33.75" height="24" fill="#111"/>
+    <path d="M7.75 1v24M14.5 1v24M21.25 1v24M28 1v24M34.75 1v24M41.5 1v24M48.25 1v24" stroke="#8c8c8c" stroke-width="1"/>
+  </svg>
+  <div>
+    <h1>Brüche mit gleichem Nenner vergleichen</h1>
+    <p class="subtitle">Gleich große Stücke – wer hat mehr?</p>
+  </div>
+</header>
+
+<!-- STRUCTURE: task block = badge + content; the block is never split across pages. -->
+<section class="task" id="aufgabe-1">
+  <div class="badge">1</div>
+  <div class="content">
+    <h2>Vergleichen</h2>
+    <p class="instruction">Setze &lt; oder &gt; in das Kästchen. Prüfe jeden Vergleich mit den Bruchstreifen.</p>
+    <div class="pairs">
+      <div><span class="letter">a)</span><span class="frac"><span>2</span><span>8</span></span><span class="cmp"></span><span class="frac"><span>7</span><span>8</span></span></div>
+      <div><span class="letter">b)</span><span class="frac"><span>7</span><span>10</span></span><span class="cmp"></span><span class="frac"><span>4</span><span>10</span></span></div>
+      <div><span class="letter">c)</span><span class="frac"><span>5</span><span>6</span></span><span class="cmp"></span><span class="frac"><span>2</span><span>6</span></span></div>
+      <div><span class="letter">d)</span><span class="frac"><span>6</span><span>12</span></span><span class="cmp"></span><span class="frac"><span>9</span><span>12</span></span></div>
+      <div><span class="letter">e)</span><span class="frac"><span>1</span><span>5</span></span><span class="cmp"></span><span class="frac"><span>4</span><span>5</span></span></div>
+      <div><span class="letter">f)</span><span class="frac"><span>11</span><span>15</span></span><span class="cmp"></span><span class="frac"><span>8</span><span>15</span></span></div>
+    </div>
+    <!-- RECIPE: tip box = outlined box; a run-in bold lead instead of a title line keeps it compact. -->
+    <div class="box tip">
+      <p><strong>Tipp:</strong> Stell dir zwei gleich große Pizzen vor, beide in 8 Stücke geschnitten. 5 Stücke sind mehr als 3 Stücke, also <span class="nums">5/8 &gt; 3/8</span>. Die Spitze des Zeichens zeigt immer zum kleineren Bruch.</p>
+    </div>
+  </div>
+</section>
+
+<section class="task" id="aufgabe-2">
+  <div class="badge">2</div>
+  <div class="content">
+    <h2>Merksatz</h2>
+    <p class="instruction">Fülle die Lücken. Ein Wort im Kasten bleibt übrig.</p>
+    <p class="word-box">Zähler · Nenner · größer · kleiner</p>
+    <p class="gap-text">Haben zwei Brüche den gleichen <span class="blank"></span>, so sind alle Stücke gleich groß.</p>
+    <p class="gap-text">Dann vergleichst du die <span class="blank"></span>.</p>
+    <p class="gap-text">Je größer der Zähler, desto <span class="blank"></span> ist der Bruch.</p>
+  </div>
+</section>
+
+<section class="task" id="aufgabe-3">
+  <div class="badge">3</div>
+  <div class="content">
+    <h2>Ordnen</h2>
+    <p class="instruction">Ordne die Brüche der Größe nach: links der kleinste, rechts der größte.</p>
+    <!-- STRUCTURE: an answer grid keeps its full grid (vertical rules) – pupils write into the cells.
+         The no-vertical-rules rule is for teacher tables only. Widths sum to 164 mm (180 − 11 − 5). -->
+    <table class="p-table">
+      <colgroup><col style="width:44mm"><col style="width:30mm"><col style="width:30mm"><col style="width:30mm"><col style="width:30mm"></colgroup>
+      <thead>
+        <tr><th>Brüche</th><th>1. (kleinster)</th><th>2.</th><th>3.</th><th>4. (größter)</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="given"><strong>a)</strong> <span class="frac"><span>5</span><span>9</span></span><span class="frac"><span>2</span><span>9</span></span><span class="frac"><span>8</span><span>9</span></span><span class="frac"><span>4</span><span>9</span></span></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td class="given"><strong>b)</strong> <span class="frac"><span>6</span><span>7</span></span><span class="frac"><span>1</span><span>7</span></span><span class="frac"><span>3</span><span>7</span></span><span class="frac"><span>7</span><span>7</span></span></td><td></td><td></td><td></td><td></td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- STRUCTURE: extension task = outlined badge with ★ (U+2605, Segoe UI Symbol, never an emoji). -->
+<section class="task" id="sternchen">
+  <div class="badge star">★</div>
+  <div class="content">
+    <h2>Sternchenaufgabe <span class="light">(wenn du fertig bist)</span></h2>
+    <p class="instruction">Finde alle Brüche mit dem Nenner 10, die größer als <span class="frac"><span>3</span><span>10</span></span> und kleiner als <span class="frac"><span>7</span><span>10</span></span> sind.</p>
+    <ul class="lines">
+      <li><span class="rule"></span></li>
+    </ul>
+  </div>
+</section>
+
+<!-- ===================== LÖSUNGSBLATT ===================== -->
+<!-- STRUCTURE: teacher material inside a pupil file switches to the teacher register (class teacher-insert =
+     named page with teacher margins and "Seite X von Y") and carries the black band. Every answer below was
+     computed against the tasks above (rubric B, Material). -->
+<section class="teacher-insert" id="loesung">
+  <div class="band">Nur für die Lehrkraft</div>
+  <h1>Lösungsblatt · Brüche mit gleichem Nenner vergleichen</h1>
+
+  <div class="sec">
+    <div class="label">Aufgabe 1 – Lösung</div>
+    <div class="body">
+      <!-- RECIPE: teacher table, compact variant inside the portrait text column; no vertical rules. -->
+      <table class="t-table compact">
+        <colgroup><col style="width:12mm"><col style="width:36mm"><col style="width:87mm"></colgroup>
+        <thead><tr><th>Nr.</th><th>Lösung</th><th>Hinweis</th></tr></thead>
+        <tbody>
+          <tr><td class="key">a)</td><td class="nums">2/8 &lt; 7/8</td><td>Zwei Stücke von acht gegen sieben von acht.</td></tr>
+          <tr><td class="key">b)</td><td class="nums">7/10 &gt; 4/10</td><td>Paar für die Dokumentenkamera in der Sicherung.</td></tr>
+          <tr><td class="key">c)</td><td class="nums">5/6 &gt; 2/6</td><td>—</td></tr>
+          <tr><td class="key">d)</td><td class="nums">6/12 &lt; 9/12</td><td>6/12 ist die halbe Pizza; wer das sieht, darf es sagen, es wird noch nicht gekürzt.</td></tr>
+          <tr><td class="key">e)</td><td class="nums">1/5 &lt; 4/5</td><td>—</td></tr>
+          <tr><td class="key">f)</td><td class="nums">11/15 &gt; 8/15</td><td>Fünfzehntel-Streifen: genau abzählen lassen.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="label">Aufgabe 2 – Lösung</div>
+    <div class="body"><p><strong>Nenner · Zähler · größer</strong> – das Wort „kleiner“ bleibt übrig. Der Text entspricht wörtlich dem Tafelanschrieb der Sicherung.</p></div>
+  </div>
+
+  <div class="sec">
+    <div class="label">Aufgabe 3 – Lösung</div>
+    <div class="body">
+      <p class="nums" style="margin-bottom:0.3em">a) 2/9 &lt; 4/9 &lt; 5/9 &lt; 8/9</p>
+      <p class="nums">b) 1/7 &lt; 3/7 &lt; 6/7 &lt; 7/7 (= 1, die ganze Pizza)</p>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="label">Sternchenaufgabe – Lösung</div>
+    <div class="body"><p class="nums">4/10, 5/10, 6/10 (drei Brüche). 3/10 und 7/10 selbst gehören nicht dazu („größer als“, „kleiner als“).</p></div>
+  </div>
+
+  <div class="sec">
+    <div class="label">Hinweise für die Besprechung</div>
+    <div class="body">
+      <ul>
+        <li>Häufigster Fehler: Zeichen vertauscht. Merkhilfe aus dem Tipp-Kasten: Die Spitze zeigt zum kleineren Bruch.</li>
+        <li>Die Regel gilt nur bei gleichem Nenner. Wer „Zähler vergleichen“ ohne diese Bedingung verallgemeinert, stolpert in der nächsten Stunde bei 1/2 und 1/3.</li>
+        <li>7/7 = 1 nur benennen; Brüche gleich 1 und größer als 1 sind Thema der kommenden Stunden.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+</body>
+</html>
