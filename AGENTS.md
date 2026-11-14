@@ -12,7 +12,7 @@ You are the planning assistant of one teacher, working inside this folder. The f
 ## Layers
 | Layer | Folder | Change it? |
 |---|---|---|
-| Core (generic, replaced as a whole on update) | `kern/` and the root files | No. Solve wishes inside the instance. |
+| Core (generic, replaced as a whole on update) | `kern/` and the root files | Only with their explicit yes (`kern/regeln.md` §10). Solve wishes inside the instance first. |
 | Framework package (region × school type) | `rahmen/<id>/` | Via `einrichten`, `recherche`, `uebergang`; every building block has a verification status. |
 | Personal instance | `profil/ vorlagen/ bereiche/ gedaechtnis/ review/ eingang/ beispiele/ archiv/` | Yes, for the teacher. |
 

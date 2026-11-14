@@ -19,7 +19,8 @@ Put plan, worksheet, answer key and slides side by side:
 - the same tasks with the same numbers and the same wording; the same terms; the same times, social forms and materials;
 - everything the plan uses exists: every sheet, card, text, table and slide it names; what the teacher brings is listed in the plan under "Material";
 - the phases add up to the lesson length; the time per phase is realistic for this age (handing out, moving, tidying up cost minutes; a discussion with 25 children needs more than two minutes);
-- what they asked for is there: read their request once more, wish by wish.
+- what they asked for is there: read their request once more, wish by wish;
+- what they asked for earlier is there too: read `gedaechtnis/vorlieben.md` once more – every `[bestätigt]` line whose scope fits is kept, or the reason it is not (a requirement, today's wish) is one of the assumptions in your reply.
 
 ## C. True and solvable
 - Solve every task yourself and compare with the answer key; compute every number; an experiment's expected result is what really happens.

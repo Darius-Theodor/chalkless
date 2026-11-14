@@ -3,6 +3,14 @@
 ## 0.4.0 (in Arbeit)
 Entwicklungsstand, noch nicht veröffentlicht und nicht als Ganzes getestet. Version `0.4.0-dev`.
 
+### Gedächtnis
+- **Jede Änderung hinterlässt eine Zeile:** Wünscht sich die Lehrkraft etwas an einem Dokument anders, steht das danach mit Datum, Bereich und Art in `gedaechtnis/feedback-log.md`. Kommt derselbe Wunsch später noch einmal, auch Wochen danach in einem neuen Chat, fragt der Agent einmal, ob er es künftig immer so machen soll.
+- **Was nebenbei gesagt wird, bleibt:** Klassengröße, Ausstattung des Raums, Lehrwerk oder Stundenzeiten trägt der Agent ins Profil ein, sobald sie fallen, und nimmt sie beim nächsten Mal nicht mehr nur an. Das Profil hat dafür die neuen Zeilen `ausstattung` und `lerngruppen`.
+- **Eine neue Vorliebe ersetzt die alte:** Widerspricht ein Dauerwunsch einem früheren, wird der frühere als überholt markiert und in der Bestätigung genannt. Gelten zwei Vorlieben zugleich, geht die engere (ein Bereich, ein Dokumenttyp) vor der allgemeinen.
+- **Vorlieben werden vor dem Zeigen nachgeprüft:** Der Agent liest sie vor der Antwort noch einmal und hält jede passende ein oder nennt, warum nicht.
+- **Kernänderungen wieder mit Zustimmung möglich:** Reicht die Instanz für einen Wunsch nicht, sagt der Agent deutlich, dass es eine Änderung an Chalkless selbst wäre, und ändert nur nach einem klaren Ja, mit Sicherung und Rückweg (Regeln §10). Die Verweise darauf in den Skills führten zuvor ins Leere.
+- **„geprüft“ mit offenen Marken:** Sagt die Lehrkraft, ein Dokument passe, und stehen noch `[PRÜFEN: …]`-Marken darin, sagt der Agent das in einem Satz; die Ordnerprüfung meldet solche Dokumente.
+
 ### Einstieg und Einrichtung
 - **Einrichtung und Updates über Git statt ZIP:** Der Kopiertext kann statt einer ZIP-Datei das öffentliche Git-Repository nennen. Der Agent klont es in einen temporären Ordner, liest dort die Einrichtungshilfe und legt Chalkless mit `kern/tools/aktualisieren.py --installieren` in den Ordner, samt Verlauf mit den veröffentlichten Versionen (auch dort, wo nur `verlauf/` statt `.git` geht). „Spiel die neue Version ein“ holt sie dann per Git (`--einspielen`): ein Merge-Commit, der Kern wird genau der veröffentlichte, eigene Dateien bleiben unverändert, überschriebene Kernänderungen werden genannt, „rückgängig“ nimmt das Update als Ganzes zurück. Aus einem ZIP eingerichtete Ordner lassen sich einmal anbinden (`--anbinden`). Der Weg über die ZIP-Datei bleibt.
 - **Neue Versionen kommen von selbst:** Einmal pro Kalenderwoche fragt der Agent zu Beginn eines Chats die Quelle (`aktualisieren.py --woechentlich`; die geprüfte Woche steht in den Einstellungen des Verlaufs, keine Datei im Ordner). Gibt es eine neue Version, erledigt er zuerst das Anliegen, spielt sie danach ein und sagt es in einem Satz; „Mach das rückgängig“ nimmt das Update zurück. Ist die Quelle nicht erreichbar, versucht er es im nächsten Chat wieder.

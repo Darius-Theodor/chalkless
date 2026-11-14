@@ -13,6 +13,10 @@
 - Länge einer Stunde: [ ]
 - Zeiten: [ ]
 
+## Ausstattung und Lerngruppen
+- ausstattung: [ ]  (was im Raum da ist, z. B. Smartboard, Beamer, Dokumentenkamera, Tablets)
+- lerngruppen: [ ]  (je Klasse die Größe und was für die Planung zählt, z. B. 2a: 21 Kinder – keine Namen)
+
 ## Termine
 | Datum | Bereich | Art | Thema | Dokument |
 |---|---|---|---|---|

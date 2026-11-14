@@ -7,7 +7,8 @@ vorlagen/      one folder per document type they brought an example for (§3)
 bereiche/      one folder per class × subject: <klasse>-<fach>/ (lowercase ASCII, hyphens: 3b-hsu, 8c-geschichte)
                with STAND.md and the sub-folders in use:
                stunden/ material/ praesentationen/ sequenzen/ jahresplan/ bilder/
-gedaechtnis/   vorlieben.md, feedback-log.md
+gedaechtnis/   vorlieben.md, feedback-log.md, kernaenderungen.md; kern-sicherung/ (backups before a consented
+               core change, kern/regeln.md §10)
 review/        offen.md
 eingang/       drop folder for new files (§8)
 beispiele/     processed originals, read-only reference
@@ -55,16 +56,18 @@ Only when the teacher brought an example of their own format (skill `vorlage-abl
 ```
 Update `letztes`, `naechstes` and `offen` when a package or a change is finished. Keep the keys of the skeleton (`kern/instanz-vorlage/bereich/STAND.md`); `aktiv` stays `–` and the section `## Spur` stays empty – no time log is kept. When a lesson follows another, `letztes` and the earlier files of the area tell you what the class already did.
 
-## 5. Preference line (`gedaechtnis/vorlieben.md`)
-`- YYYY-MM-DD (<source>) [bestätigt|überholt] (<scope>): <rule in one sentence>.`
-Scope: `alle`, a document type, an area, or `<area>/<typ>`.
+## 5. Memory lines (`gedaechtnis/`)
+- **Preference** (`vorlieben.md`): `- YYYY-MM-DD (<source>) [bestätigt|überholt] (<scope>): <rule in one sentence>.`
+  Scope: `alle`, a document type, an area, or `<area>/<typ>`.
+- **Change** (`feedback-log.md`), one line per change they asked for: `- YYYY-MM-DD · <area> · <typ> · <kind>: <what they wanted, in a few words> · Regel: keine | gefragt | bestätigt | abgelehnt`
+  Kind: `layout`, `inhalt`, `umfang`, `zeit`, `sprache`, `fehler`. Skill `rueckmeldung` writes its longer entry with their words instead.
 
 ## 6. Framework package (`rahmen/<id>/`)
 - id: `<country>-<region>-<schooltype>` in lowercase ASCII: `de-by-grundschule`, `de-ni-grundschule`, `de-nw-gymnasium`, `at-wien-volksschule`.
 - `paket.md` is the index: one table row per building block (Lehrplan per subject, Kalender, Begriffe, Ausbildung, Recht) with source, location, as-of date and **status** `geprüft` (read in the primary source and checked against it) / `gefunden, ungeprüft` / `fehlt`. Setup writes the index and looks up which curriculum applies (rows `gefunden, ungeprüft` with publisher, title and address; everything else `fehlt`); skill `recherche` fills it later, block by block. The core ships no packages.
 
 ## 7. Commits
-One line, English: `<typ> <area>: <slug> (<status>)` – for a package `paket <area>: <slug> (entwurf)` –, `change <area>: <slug> (<what>)`, `memory: …`, `profile: …`, `template: …`, `framework: …`, `setup: …`, `core: update to <version>`. Instance paths only.
+One line, English: `<typ> <area>: <slug> (<status>)` – for a package `paket <area>: <slug> (entwurf)` –, `change <area>: <slug> (<what>)`, `memory: …`, `profile: …`, `template: …`, `framework: …`, `setup: …`, `update: instance adjusted to <version>`, `core: update to <version>`, `core-change: <file> (<what>)`. Instance paths only, except in the last two.
 
 ## 8. Incoming files (`eingang/`)
 What they want you to use goes into `eingang/` (or they send it in the chat and you save it there). After processing, move it to `beispiele/<topic>/` and add a row to `beispiele/README.md`.

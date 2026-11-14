@@ -20,7 +20,8 @@ What it checks:
     `start` without `fertig`, a document HTML without its PDF or with an older PDF, a PDF without its HTML,
     documents cut off while saving, brain files that are not UTF-8;
   - the tool protocol profil/werkzeuge.md (INFO only: its last run, or that none was written yet);
-  - areas, templates, document metadata, memory and incoming files.
+  - areas, templates, document metadata (also: status geprüft or verwendet while [PRÜFEN: …] marks remain, INFO),
+    memory and incoming files.
 """
 from __future__ import annotations
 
@@ -360,6 +361,9 @@ def check(root: Path = ROOT):
             add("WARN", f"{rel}: unknown status '{meta['status']}'")
         if not NAME_RE.match(h.name):
             add("INFO", f"{rel}: file name does not follow YYYY-MM-DD_<typ>_<slug>.html")
+        if meta.get("status") in ("geprüft", "verwendet") and "[PRÜFEN:" in h.read_text(encoding="utf-8", errors="replace"):
+            add("INFO", f"{rel}: status {meta['status']}, but [PRÜFEN: …] marks remain – the status says they find it fine, "
+                        "not that these points were verified; name them when the document comes up next, never change the status yourself")
         v = meta.get("vorlage")
         if v and v in versions and versions[v] and meta.get("vorlage_version") not in (None, versions[v]):
             add("INFO", f"{rel}: built with template {v} v{meta.get('vorlage_version')}, current v{versions[v]}")
