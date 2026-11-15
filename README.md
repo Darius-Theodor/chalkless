@@ -25,7 +25,7 @@ Bitte keine Namen, Fotos oder Noten von Schülerinnen und Schülern in den Chat 
 
 ## Wie es funktioniert
 - Du öffnest deine KI-App mit einem Ordner und schickst den Text aus START-HIER. Der Agent stellt eine Frage, die du in einem Satz beantwortest, holt sich dann Chalkless und richtet die Werkzeuge ein.
-- Danach sagst du, was du brauchst. Der Agent baut das Paket, sieht sich seine Seiten selbst an, rechnet Lösungen nach und zeigt dir das Ergebnis mit einer kurzen Antwort. Du besserst im Gespräch nach.
+- Danach sagst du, was du brauchst. Der Agent sagt kurz, wie er dich verstanden hat, fragt, was er wissen muss, und baut auf dein „los“ das Paket. Er sieht sich seine Seiten selbst an, rechnet Lösungen nach und zeigt dir das Ergebnis mit einer kurzen Antwort. Du besserst im Gespräch nach.
 - Eigene Vorgaben (Seminar, Schule) und eigene Beispiele gehen vor; dauerhafte Wünsche merkt er sich.
 
 ## Voraussetzungen
@@ -56,5 +56,8 @@ Die Übersicht zeigt nur an; was du willst, sagst du im Chat. Es gibt sie in zwe
 
 ## Neue Versionen
 Wurde Chalkless aus dem Git-Repository eingerichtet, schaut der Agent einmal pro Woche zu Beginn eines Chats nach, ob es eine neue Version gibt. Gibt es eine, erledigt er erst dein Anliegen, spielt sie danach ein und sagt es dir in einem Satz. Du kannst auch jederzeit sagen: „Spiel die neue Chalkless-Version ein.“ Wurde Chalkless aus einer ZIP-Datei eingerichtet, sagst du das, wenn es ein neues Paket gibt. Sonst lädst du das neue Paket herunter oder legst es in den Ordner „eingang“. In beiden Fällen ersetzt er nur den Kern, lässt alles Eigene unverändert, prüft deinen Arbeitsbereich und sagt dir kurz, was neu ist. „Mach das rückgängig“ nimmt auch ein Update als Ganzes zurück.
+
+## Angelehnt an
+Die Planungsrunde vor dem Bauen ist angelehnt an den grilling-Skill von Matt Pocock (MIT): <https://github.com/mattpocock/skills>. Der Text hier ist eigenständig und auf Lehrkräfte zugeschnitten.
 
 Kern-Version: `kern/VERSION`.

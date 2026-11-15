@@ -19,7 +19,7 @@ Create the file with the heading `# Pilot-Protokoll` when the first entry comes.
 
 Course of the work – one line each, always, so that the people developing Chalkless see how it went without the teacher reporting anything:
 - `einrichtung` (once, at the end of the setup): minutes from their sentence to the ready card, where the history lives (`.git`, `verlauf`, none), tools present or missing, curriculum found or not.
-- `paket` (after every finished package or single document): the parts with page and slide counts, minutes from their request to your closing reply, number of questions you asked before, number of `[PRÜFEN]` marks.
+- `paket` (after every finished package or single document): the parts with page and slide counts, minutes from their go to your closing reply, number of planning replies before the go (0 = built in one go) and of questions you asked in them, number of `[PRÜFEN]` marks.
 - `aenderung` (after every change they asked for): what kind – `layout`, `inhalt`, `umfang`, `zeit`, `sprache` or `fehler` (something was wrong) –, minutes, and whether it was done in one go. Only the kind, never what the change said.
 - `rueckgaengig` (they asked to undo something): whether it worked.
 

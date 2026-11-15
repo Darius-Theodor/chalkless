@@ -3,6 +3,11 @@
 ## 0.4.0 (in Arbeit)
 Entwicklungsstand, noch nicht veröffentlicht und nicht als Ganzes getestet. Version `0.4.0-dev`.
 
+### Erst planen, dann bauen
+- **Der Agent baut nicht mehr sofort los:** Auf einen Wunsch nach etwas Neuem antwortet er zuerst mit einer kurzen Planungsnachricht: wie er dich verstanden hat, was er daraus machen würde, wenige Fragen mit Vorschlag, meist keine oder eine (ein „ja“ nimmt den Vorschlag an) und was er sonst annimmt. Dokumente entstehen erst, wenn du „los“ sagst. Bringst du danach etwas Neues, fragt er nur dazu noch einmal.
+- **In einem Rutsch nur auf Wunsch:** „Mach alles in einem Rutsch“ oder „ohne Rückfragen“ überspringt die Planung; „immer direkt loslegen“ merkt er sich als Dauerwunsch. Änderungen an Bestehendem („teil die Folie auf“) macht er weiter sofort.
+- Die Planungsrunde ist angelehnt an den grilling-Skill von Matt Pocock (MIT, github.com/mattpocock/skills): Empfehlung je Frage, Fakten sucht der Agent selbst, gebaut wird erst nach Zustimmung.
+
 ### Gedächtnis
 - **Jede Änderung hinterlässt eine Zeile:** Wünscht sich die Lehrkraft etwas an einem Dokument anders, steht das danach mit Datum, Bereich und Art in `gedaechtnis/feedback-log.md`. Kommt derselbe Wunsch später noch einmal, auch Wochen danach in einem neuen Chat, fragt der Agent einmal, ob er es künftig immer so machen soll.
 - **Was nebenbei gesagt wird, bleibt:** Klassengröße, Ausstattung des Raums, Lehrwerk oder Stundenzeiten trägt der Agent ins Profil ein, sobald sie fallen, und nimmt sie beim nächsten Mal nicht mehr nur an. Das Profil hat dafür die neuen Zeilen `ausstattung` und `lerngruppen`.

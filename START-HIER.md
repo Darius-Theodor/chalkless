@@ -31,7 +31,7 @@ one question first and set everything up after that. Write to me in English from
 ```
 
 ## So arbeitest du damit
-- **Erst kommt das Ergebnis, dann redet ihr darüber.** Der Agent fragt nur, wenn sonst etwas Falsches entstünde. Was er angenommen hat, sagt er dir in einer Zeile.
+- **Erst der Plan, dann das Ergebnis.** Der Agent sagt dir in ein paar Zeilen, wie er dich verstanden hat, stellt höchstens eine Handvoll Fragen mit Vorschlag und baut erst, wenn du „los“ sagst. Soll er ohne Rückfragen anfangen, sag es dazu: „Mach alles in einem Rutsch.“
 - **Nachbessern im Gespräch:** „Die Folie ist zu voll, mach zwei draus.“ „Die Kinder brauchen mehr Platz zum Schreiben.“ Er ändert genau das und hält den Rest stimmig.
 - **Die Übersicht** zeigt, was fertig ist, mit Vorschau. Dort öffnest du die Dokumente. Je nach App steht sie neben dem Chat oder liegt als Datei „Übersicht“ im Ordner, die du mit einem Doppelklick öffnest; der Agent sagt dir, was bei dir gilt. Dokumente gibt es als PDF zum Drucken, Folien als Präsentation im Browser.
 - **Dauerhafte Wünsche:** Sag „immer“ oder „nie“, dann merkt er es sich. „Was hast du dir gemerkt?“ zeigt alles, „vergiss das“ nimmt es zurück.

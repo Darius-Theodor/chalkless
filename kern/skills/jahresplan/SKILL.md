@@ -5,7 +5,7 @@ description: Create or update a plan for one subject and class across the school
 
 # Skill: jahresplan
 
-## Inputs (from context; at most one question, `kern/regeln.md` §4 – the rest are stated assumptions)
+## Inputs (from context; planning reply and their go first, `kern/regeln.md` §4)
 - Area, lessons per week and slots (`profil/lehrkraft.md`), start date, what was already taught, optional textbook or theme.
 - Whether the plan is required and in which form (`profil/pflichten.md`); if not required, keep it as light as they want.
 

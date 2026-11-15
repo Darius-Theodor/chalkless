@@ -22,7 +22,7 @@ Gibt es feste Vorgaben von Schule oder Seminar, oder weißt du schon, was du als
 - **Plain chat text.** No question form, no multiple choice, no buttons, no tool that asks on your behalf, even if your host offers one.
 - You need two things: the region (Bundesland or country) and the school type. If one is missing after their answer, ask for exactly that in one sentence. Everything else (class, subjects, training, requirements, an example of their own) you take if they said it and never ask for.
 - Before asking, read what they already wrote (their first messages, files in `eingang/`). If that already gives region and school type, ask nothing.
-- If their message already contains a request for a lesson, setup and the first package happen in the same turn: write the profile from what they said, then build (step 3). A missing detail that would not make the lesson wrong (class name, class size, exact date) is assumed and named, not asked.
+- If their message already contains a request for a lesson, setup and the planning reply for it happen in the same turn: write the profile from what they said, then answer with the planning reply (step 3; `kern/regeln.md` §4). A missing detail that would not make the lesson wrong (class name, class size, exact date) is an assumption there, not a question.
 - Form of address and language: as they write (German: "du" unless they write "Sie"). Never ask for pupil data.
 
 ## 2. Write the instance (quietly, from what they said)
@@ -42,7 +42,7 @@ Gibt es feste Vorgaben von Schule oder Seminar, oder weißt du schon, was du als
 - If `setup/EINRICHTUNG.md` still exists: delete the folder `setup/` now (it is only for the first setup).
 
 ## 3. Ready card, or the first package
-**They already said what they need:** build it now (skill `dokument`). The closing reply of that package starts with one extra line, "Chalkless ist eingerichtet: <Schulform> · <Region> · <Klasse und Fächer>.", says once how the overview is opened and names the curriculum you found in one sentence (as in point 2 below).
+**They already said what they need:** answer with the planning reply for it (`kern/regeln.md` §4) instead of the ready card. It starts with one extra line, "Chalkless ist eingerichtet: <Schulform> · <Region> · <Klasse und Fächer>.", says once how the overview is opened and names the curriculum you found in one sentence (as in point 2 below); these lines do not count against its twelve. If they asked for it in one go, build now (skill `dokument`) and put these lines at the start of the closing reply.
 
 **Otherwise the ready card.** It is the whole reply and is not counted against the eight lines of `kern/regeln.md` §1:
 1. This block as a code block. The three check lines and the three rules are fixed; fill in the five rows from what they said and what you found, in their language, the values starting in the same column. Leave out a row you have nothing for (no class yet → `Unterricht` shows the subjects only; not in training and nothing special → no `Status` row). `Lehrplan` names the curriculum you found, short (its name and the grade band); nothing found → "noch nicht gefunden". `Übersicht` says how they open it, in a few words ("neben dem Chat" for a side panel; "Datei „Übersicht“ im Ordner – Doppelklick" for the file).
